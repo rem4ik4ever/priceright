@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+  //  url      = "file:./db.sqlite"
+}
+
+model Example {
+  id String @id @default(cuid())
+}
+
+// Neccessary for Next auth
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String     @id @default(cuid())
+  name          String?
+  email         String?    @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  campaigns     Campaign[]
+  team          Team?      @relation(fields: [teamId], references: [id])
+  teamId        String?
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model PixelTracker {
+  id        String @id @default(cuid())
+  tracker   String @unique @default(uuid())
+  openCount Int    @default(0)
+}
+
+model Team {
+  id    String @id @default(cuid())
+  name  String
+  users User[]
+}
+
+model Campaign {
+  id           String        @id @default(cuid())
+  name         String
+  fromEmail    String
+  fromName     String
+  customTo     String?
+  replyToEmail String?
+  lists        IncludeList[]
+  excludeLists ExcludeList[]
+  owner        User          @relation(fields: [userId], references: [id])
+  userId       String
+}
+
+model IncludeList {
+  campaign   Campaign    @relation(fields: [campaignId], references: [id])
+  campaignId String
+  list       ContactList @relation(fields: [listId], references: [id])
+  listId     String
+
+  @@id([campaignId, listId])
+}
+
+model ExcludeList {
+  campaign   Campaign    @relation(fields: [campaignId], references: [id])
+  campaignId String
+  list       ContactList @relation(fields: [listId], references: [id])
+  listId     String
+
+  @@id([campaignId, listId])
+}
+
+model ContactList {
+  id                  String            @id @default(cuid())
+  name                String
+  contacts            ContactsInLists[]
+  includedInCampaigns IncludeList[]
+  excludedInCampaigns ExcludeList[]
+}
+
+model Contact {
+  id    String            @id @default(cuid())
+  email String
+  lists ContactsInLists[]
+}
+
+model ContactsInLists {
+  contact    Contact     @relation(fields: [contactId], references: [id])
+  contactId  String // relation scalar field (used in the `@relation` attribute above)
+  list       ContactList @relation(fields: [listId], references: [id])
+  listId     String // relation scalar field (used in the `@relation` attribute above)
+  assignedAt DateTime    @default(now())
+
+  @@id([contactId, listId])
+}

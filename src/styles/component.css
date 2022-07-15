@@ -1,0 +1,15 @@
+.fit {
+  min-height: calc(100vh - 88px);
+}
+
+.fadein {
+  animation: fadein 1s;
+}
+@keyframes fadein {
+  from {
+      opacity:0;
+  }
+  to {
+      opacity:1;
+  }
+}

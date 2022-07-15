@@ -1,0 +1,62 @@
+.logo {
+  @apply text-orange text-2xl font-bold cursor-pointer;
+}
+
+.header {
+  @apply text-center flex items-center justify-center;
+  min-height: 88px;
+}
+
+.heroTitle{
+  @apply text-4xl md:text-6xl text-center font-bold;
+}
+
+.subtitle {
+  @apply text-accent-5 md:text-xl text-center px-10 mt-8;
+}
+
+.subscribeForm {
+  @apply flex md:flex-row flex-col items-stretch md:items-center gap-2 flex-1 max-w-md mx-auto mt-8 px-2;
+}
+
+.emailInput {
+  @apply border border-accent-6 px-2 py-2 rounded-sm flex-1;
+}
+
+.submit {
+  @apply text-accent-0 bg-secondary py-2 px-4 rounded-sm transition-all;
+}
+
+.submit:hover {
+  @apply bg-hover-2;
+}
+
+.hero{
+  @apply flex md:flex-row flex-col items-center justify-center;
+}
+
+.heroContent {
+  @apply max-w-xl relative;
+}
+
+
+.featuresSection {
+  @apply bg-dark text-white;
+}
+
+.featuresTitle {
+  @apply text-3xl px-2 md:text-5xl py-8 text-center;
+}
+
+
+.featureItemText{
+  @apply text-center max-w-xs;
+}
+
+.featureItemTextContainer {
+  @apply flex justify-center items-center w-96;
+}
+
+.featureItemImageContainer {
+  @apply border border-orange-light rounded-md overflow-hidden p-2 md:w-96 my-4 w-64;
+}
