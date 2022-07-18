@@ -1,5 +1,5 @@
 .logo {
-  @apply text-orange text-2xl font-bold cursor-pointer;
+  @apply text-orange text-2xl cursor-pointer;
 }
 
 .header {
@@ -8,11 +8,11 @@
 }
 
 .heroTitle{
-  @apply text-4xl md:text-6xl text-center font-bold;
+  @apply mx-auto max-w-4xl text-5xl tracking-tight text-slate-900 sm:text-6xl;
 }
 
 .subtitle {
-  @apply text-accent-5 md:text-xl text-center px-10 mt-8;
+  @apply mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700;
 }
 
 .subscribeForm {
@@ -32,31 +32,9 @@
 }
 
 .hero{
-  @apply flex md:flex-row flex-col items-center justify-center;
+  @apply flex md:flex-row flex-col;
 }
 
 .heroContent {
-  @apply max-w-xl relative;
-}
-
-
-.featuresSection {
-  @apply bg-dark text-white;
-}
-
-.featuresTitle {
-  @apply text-3xl px-2 md:text-5xl py-8 text-center;
-}
-
-
-.featureItemText{
-  @apply text-center max-w-xs;
-}
-
-.featureItemTextContainer {
-  @apply flex justify-center items-center w-96;
-}
-
-.featureItemImageContainer {
-  @apply border border-orange-light rounded-md overflow-hidden p-2 md:w-96 my-4 w-64;
+  @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center lg:pt-32;
 }

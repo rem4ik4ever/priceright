@@ -35,7 +35,7 @@
   --accent-8: #111111;
   --accent-9: #000;
 
-  --font-sans: PT Sans, -apple-system, system-ui, BlinkMacSystemFont, 'Helvetica Neue',
+  --font-sans: Inter var, PT Sans, -apple-system, system-ui, BlinkMacSystemFont, 'Helvetica Neue',
     'Helvetica', sans-serif;
 }
 

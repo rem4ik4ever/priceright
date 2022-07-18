@@ -1,20 +1,21 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
   future: {
     purgeLayersByDefault: true,
     applyComplexClasses: true,
   },
-  purge: {
-    content: [
-      './src/**/*.{js,ts,jsx,tsx}',
-    ],
-    options: {
-      safelist: {
-        standard: ['outline-none'],
-      },
-    },
-  },
+  content: [
+    './src/**/*.{js,ts,jsx,tsx}',
+  ],
+  safelist: [
+    'outline-none'
+  ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+      },
       maxWidth: {
         '8xl': '1920px',
       },

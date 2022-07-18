@@ -3,7 +3,7 @@
   px-10 py-5 leading-6 transition ease-in-out duration-150
   shadow-sm text-center justify-center uppercase
   border border-transparent items-center text-sm font-semibold
-  tracking-wide;
+  tracking-wide rounded-full;
   max-height: 64px;
 }
 
