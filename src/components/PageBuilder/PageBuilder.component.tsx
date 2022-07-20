@@ -3,9 +3,17 @@ import { useCallback, useEffect } from "react"
 import { useBuilder } from "./context/builder.context"
 
 export const PageBuilder = () => {
-  const { state, addEditor, removeBlock, mapEditor, togglePreview, commands } = useBuilder()
+  const {
+    state,
+    addEditor,
+    removeBlock,
+    mapEditor,
+    togglePreview,
+    setFocused,
+    focusNext,
+    focusPrevious
+  } = useBuilder()
   const { editorIds, editorsMap, preview } = state;
-  const {focusNext, focusPrevious} = commands
 
   const onDelete = useCallback((id: string) => {
     const idx = editorIds.indexOf(id)
@@ -44,6 +52,7 @@ export const PageBuilder = () => {
               index={index}
               onEnter={addEditor}
               onDelete={onDelete}
+              onFocus={setFocused}
               onUp={focusPrevious}
               onDown={focusNext}
               setNodeRef={(ref) => {

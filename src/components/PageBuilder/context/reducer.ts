@@ -7,6 +7,9 @@ export type Action = {type: 'ADD_BLOCK', afterId: string | -1}
   | {type: 'MAP_EDITOR', payload: {id: string, editor: Editor}}
   | {type: 'REMOVE_BLOCK', id: string}
   | {type: 'TOGGLE_PREVIEW', toggle: boolean}
+  | {type: 'SET_FOCUSED', id: string | undefined}
+  | {type: 'FOCUS_NEXT' }
+  | {type: 'FOCUS_PREVIOUS' }
 
 
 const addBlock = (editorIds: string[], afterId: string | -1) => {
@@ -23,6 +26,41 @@ const addBlock = (editorIds: string[], afterId: string | -1) => {
     ...editorIds.slice(index + 1)
   ]
 }
+
+const focusNext = (state: BuilderState): BuilderState => {
+  if(!state.focusedId) {
+    return {
+      ...state
+    }
+  }
+  const index = state.editorIds.indexOf(state.focusedId) 
+  if(index + 1 >= state.editorIds.length) return {...state}
+  const focusId = state.editorIds[index + 1] as string;
+  const editor = state.editorsMap[focusId]
+  editor?.commands.focus();
+  return {
+    ...state,
+    focusedId: focusId
+  }
+}
+
+const focusPrevious = (state: BuilderState): BuilderState => {
+  if(!state.focusedId) {
+    return {
+      ...state
+    }
+  }
+  const index = state.editorIds.indexOf(state.focusedId) 
+  if(index - 1 < 0) return {...state}
+  const focusId = state.editorIds[index - 1] as string;
+  const editor = state.editorsMap[focusId]
+  editor?.commands.focus();
+  return {
+    ...state,
+    focusedId: focusId
+  }
+}
+
 
 export const reducer = (state: BuilderState, action: Action): BuilderState=> {
   switch(action.type){
@@ -52,6 +90,18 @@ export const reducer = (state: BuilderState, action: Action): BuilderState=> {
         ...state,
         editorIds: state.editorIds.filter(editorId => editorId !== action.id)
       }
+    }
+    case 'SET_FOCUSED': {
+      return {
+        ...state,
+        focusedId: action.id
+      }
+    }
+    case 'FOCUS_NEXT': {
+      return focusNext(state)
+    }
+    case 'FOCUS_PREVIOUS': {
+      return focusPrevious(state)
     }
     default:
       return state;

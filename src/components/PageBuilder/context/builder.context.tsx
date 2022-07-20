@@ -56,59 +56,9 @@ export const useBuilder = () => {
   });
   const actions = getActions(dispatch);
 
-  //const getCurrentlyFocusedId = () => {
-  //  const focusId = state.editorIds.filter(editorId => {
-  //    if (state.editorsMap[editorId]?.isFocused) {
-  //      return editorId
-  //    }
-  //  }).pop()
-  //  console.log({ focusId, text: state.editorsMap[focusId as string]?.getText() })
-  //  return focusId
-  //}
-
-  //const focusNext = useCallback(() => {
-  //  console.log("next")
-  //  const { editorIds, editorsMap } = state
-  //  const currentlyFocused = getCurrentlyFocusedId()
-  //  if (!currentlyFocused) return
-
-  //  console.log({ currentlyFocused })
-
-  //  const idx = editorIds.indexOf(currentlyFocused)
-
-  //  console.log({ idx })
-
-  //  //if (idx + 2 >= editorIds.length) return
-
-  //  const focusId = editorIds[idx + 1] as string;
-  //  console.log({focusId})
-  //  editorsMap[focusId]?.commands.focus()
-  //}, [state.editorIds, state.editorsMap])
-
-  //const focusPrevious = useCallback(() => {
-  //  console.log("prev")
-  //  const { editorIds, editorsMap } = state
-  //  if (!currentlyFocused) return
-  //  console.log({ currentlyFocused })
-
-  //  const idx = editorIds.indexOf(currentlyFocused)
-  //  console.log({ idx })
-
-  //  if (idx < 0) return
-
-  //  const focusId = editorIds[idx] as string;
-  //  console.log({focusId})
-  //  editorsMap[focusId]?.commands.focus()
-  //}, [currentlyFocused, state.editorIds, state.editorsMap])
-
   return {
     state,
     ...actions,
-    //commands: {
-    //  currentlyFocused,
-    //  focusNext,
-    //  focusPrevious
-    //}
   };
 };
 

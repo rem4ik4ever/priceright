@@ -1,4 +1,4 @@
-import { useEditor, EditorContent, BubbleMenu } from '@tiptap/react'
+import { useEditor, EditorContent, BubbleMenu, Editor, EditorEvents } from '@tiptap/react'
 import Document from '@tiptap/extension-document'
 import { Typography } from '@tiptap/extension-typography'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -19,15 +19,17 @@ interface Props {
   index: number;
   onEnter: (id: string) => void
   onDelete: (id: string) => void
-  onUp: () => void;
-  onDown: () => void;
+  onUp?: () => void;
+  onDown?: () => void;
+  onFocus?: (id: string, props?: EditorEvents['focus']) => void;
   setNodeRef: (ref: MutableRefObject<TextBlock>) => void
   preview: boolean
 }
-export const TextEditor = ({ id, index, onEnter, onDelete, onUp, onDown, setNodeRef, preview }: Props) => {
+export const TextEditor = ({ id, index, onEnter, onDelete, onUp, onDown, onFocus, setNodeRef, preview }: Props) => {
   const ref = useRef<TextBlock>()
   const editor = useEditor({
     editable: !preview,
+    onFocus: (props) => onFocus && onFocus(id, props),
     extensions: [
       StarterKit.configure({ document: false }),
       Typography,
@@ -51,11 +53,11 @@ export const TextEditor = ({ id, index, onEnter, onDelete, onUp, onDown, setNode
               }
             },
             ArrowUp: () => {
-              onUp()
+              onUp && onUp()
               return true;
             },
             ArrowDown: () => {
-              onDown()
+              onDown && onDown()
               return true;
             }
           }
