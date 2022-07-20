@@ -1,42 +1,31 @@
 import { TextEditor } from "@components/TextEditor"
-import { Editor } from "@tiptap/react"
-import { useCallback, useEffect, useState } from "react"
-import { createEditor } from "./utils"
-import { v4 } from 'uuid'
+import { useCallback, useEffect } from "react"
 import { useBuilder } from "./context/builder.context"
 
 export const PageBuilder = () => {
-  const { state, addEditor, removeBlock, mapEditor } = useBuilder()
-  const { editorIds } = state;
-  //const [editorsMap, setEditorsMap] = useState<{ [id: string]: Editor }>({})
-  //const [editorIds, setEditors] = useState<string[]>([])
-  //const handleEnter = useCallback((id: string) => {
-  //  // insert editor after id
-  //  const index = editorIds.indexOf(id)
-  //  setEditors([
-  //    ...editorIds.slice(0, index + 1),
-  //    v4(),
-  //    ...editorIds.slice(index + 1)
-  //  ])
-  //}, [editorIds])
+  const { state, addEditor, removeBlock, mapEditor, togglePreview } = useBuilder()
+  const { editorIds, editorsMap, preview } = state;
 
-  //const handleDestroy = useCallback((id: string) => {
-  //  const index = editorIds.indexOf(id)
-  //  console.log({index, id, editorIds})
-  //  //setEditors(editorIds.filter(editorId => editorId !== id))
-  //  if(index && index > 0) {
-  //    const previousId = editorIds[index - 1]
-  //    console.log({previousId})
-  //    if(previousId){
-  //      const editor = editorsMap[previousId]
-  //      console.log({editor});
-  //      editor?.commands.focus()
-  //    }
-  //  }
-  //}, [])
+  const onDelete = useCallback((id: string) => {
+    const idx = editorIds.indexOf(id)
+    if (idx > 0) {
+      const focusId = editorIds[idx - 1] as string;
+      editorsMap[focusId]?.commands.focus();
+    }
+    removeBlock(id)
+  }, [editorIds])
+
+  const logContent = useCallback(() => {
+    const content = editorIds.map(id => {
+      return editorsMap[id]?.getHTML()
+    })
+    console.log({ content })
+  }, [editorsMap, editorIds])
 
   useEffect(() => {
-    addEditor(-1)
+    if (editorIds.length === 0) {
+      addEditor(-1)
+    }
   }, [])
 
   return (
@@ -45,11 +34,20 @@ export const PageBuilder = () => {
         Some config area
       </div>
       <div className="w-full px-6 py-6 mx-8 bg-primary border">
-        {editorIds.map((id:string) => (
+        <button type="button" onClick={logContent}>log content</button>
+        <button type="button" onClick={() => togglePreview(!preview)}>preview: {preview ? 'ON' : 'OFF'}</button>
+        {editorIds.map((id: string, index: number) => (
           <div key={id}>
-          <TextEditor id={id} onEnter={addEditor} onDelete={removeBlock} setNodeRef={(ref) => {
-            mapEditor(ref.current.id, ref.current.editor)
-          }} />
+            <TextEditor
+              id={id}
+              index={index}
+              onEnter={addEditor}
+              onDelete={onDelete}
+              setNodeRef={(ref) => {
+                mapEditor(ref.current.id, ref.current.editor)
+              }}
+              preview={preview}
+            />
           </div>
         ))}
       </div>

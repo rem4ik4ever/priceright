@@ -21,7 +21,8 @@ export const usePageBuilder =
 
 export interface BuilderState {
   editorIds: string[],
-  editorsMap: { [id: string]: Editor }
+  editorsMap: { [id: string]: Editor },
+  preview: boolean
 }
 export interface BuilderContextValue {
   state: BuilderState;
@@ -29,10 +30,11 @@ export interface BuilderContextValue {
 
 const initialState = {
   editorIds: [],
-  editorsMap: {}
+  editorsMap: {},
+  preview: false
 }
 
-const debugReducer = (reducer: any) => (state: BuilderState, action: Action) => {
+const debugReducer = (reducer: any) => (state: BuilderState, action: Action): BuilderState => {
   const next = reducer(state, action)
   console.log({ prev: state, next, action })
   return next;

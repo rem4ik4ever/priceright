@@ -6,6 +6,7 @@ import { Editor } from "@tiptap/react";
 export type Action = {type: 'ADD_BLOCK', afterId: string | -1} 
   | {type: 'MAP_EDITOR', payload: {id: string, editor: Editor}}
   | {type: 'REMOVE_BLOCK', id: string}
+  | {type: 'TOGGLE_PREVIEW', toggle: boolean}
 
 const addBlock = (editorIds: string[], afterId: string | -1) => {
   if(afterId === -1){
@@ -37,6 +38,12 @@ export const reducer = (state: BuilderState, action: Action): BuilderState=> {
           ...state.editorsMap,
           [action.payload.id]: action.payload.editor
         }
+      }
+    }
+    case 'TOGGLE_PREVIEW': {
+      return {
+        ...state,
+        preview: action.toggle
       }
     }
     case 'REMOVE_BLOCK': {

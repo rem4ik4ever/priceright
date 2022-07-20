@@ -16,13 +16,16 @@ import { TextBlock } from '@components/PageBuilder/types'
 
 interface Props {
   id: string;
+  index: number;
   onEnter: (id: string) => void
   onDelete: (id: string) => void
   setNodeRef: (ref: MutableRefObject<TextBlock>) => void
+  preview: boolean
 }
-export const TextEditor = ({ id, onEnter, onDelete, setNodeRef }: Props) => {
+export const TextEditor = ({ id, index, onEnter, onDelete, setNodeRef, preview }: Props) => {
   const ref = useRef<TextBlock>()
   const editor = useEditor({
+    editable: !preview,
     extensions: [
       StarterKit.configure({ document: false }),
       Typography,
@@ -35,7 +38,7 @@ export const TextEditor = ({ id, onEnter, onDelete, setNodeRef }: Props) => {
               return true;
             },
             Backspace: () => {
-              if (this.editor.getText().length === 0) {
+              if (this.editor.getText().length === 0 && index !== 0) {
                 this.editor.commands.clearContent()
                 this.editor.commands.clearNodes()
                 this.editor.destroy();
@@ -49,12 +52,14 @@ export const TextEditor = ({ id, onEnter, onDelete, setNodeRef }: Props) => {
         },
       }),
       Placeholder.configure({
-        placeholder: ({ node }) => {
-          if (node.type.name === 'heading') {
-            return 'Add heading'
+        placeholder: ({ node, editor }) => {
+          if(editor.isFocused){
+            if (node.type.name === 'heading') {
+              return 'Add heading'
+            }
+            return 'Insert elements by typing "/"'
           }
-
-          return 'Insert elements by typing "/"'
+          return ''
         },
       }),
     ],
@@ -63,7 +68,7 @@ export const TextEditor = ({ id, onEnter, onDelete, setNodeRef }: Props) => {
       attributes: {
         class: editorStyles.root as string,
       }
-    }
+    },
   })
 
   useEffect(() => {
@@ -73,6 +78,15 @@ export const TextEditor = ({ id, onEnter, onDelete, setNodeRef }: Props) => {
       setNodeRef(ref as MutableRefObject<TextBlock>)
     }
   }, [editor])
+
+  useEffect(() => {
+    if (!editor) {
+      return undefined
+    }
+
+    editor.setEditable(!preview)
+  }, [editor, preview])
+
 
   return (
     <>
