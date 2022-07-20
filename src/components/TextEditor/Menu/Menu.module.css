@@ -1,0 +1,10 @@
+.root {
+  @apply border bg-primary flex rounded-md;
+}
+
+.item {
+  @apply border-r px-2 py-1 last:border-none text-accent-6; 
+  &:hover {
+    @apply bg-accent-2;
+  } 
+}

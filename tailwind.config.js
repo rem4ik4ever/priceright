@@ -11,6 +11,9 @@ module.exports = {
   safelist: [
     'outline-none'
   ],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
   theme: {
     extend: {
       fontFamily: {
