@@ -19,10 +19,12 @@ interface Props {
   index: number;
   onEnter: (id: string) => void
   onDelete: (id: string) => void
+  onUp: () => void;
+  onDown: () => void;
   setNodeRef: (ref: MutableRefObject<TextBlock>) => void
   preview: boolean
 }
-export const TextEditor = ({ id, index, onEnter, onDelete, setNodeRef, preview }: Props) => {
+export const TextEditor = ({ id, index, onEnter, onDelete, onUp, onDown, setNodeRef, preview }: Props) => {
   const ref = useRef<TextBlock>()
   const editor = useEditor({
     editable: !preview,
@@ -47,6 +49,14 @@ export const TextEditor = ({ id, index, onEnter, onDelete, setNodeRef, preview }
               } else {
                 return false;
               }
+            },
+            ArrowUp: () => {
+              onUp()
+              return true;
+            },
+            ArrowDown: () => {
+              onDown()
+              return true;
             }
           }
         },
@@ -91,6 +101,7 @@ export const TextEditor = ({ id, index, onEnter, onDelete, setNodeRef, preview }
   return (
     <>
       <Menu editor={editor} />
+      {id}
       <EditorContent className={editorStyles.root} editor={editor} />
       <ElementInserter editor={editor} />
     </>

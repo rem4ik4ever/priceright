@@ -8,6 +8,7 @@ export type Action = {type: 'ADD_BLOCK', afterId: string | -1}
   | {type: 'REMOVE_BLOCK', id: string}
   | {type: 'TOGGLE_PREVIEW', toggle: boolean}
 
+
 const addBlock = (editorIds: string[], afterId: string | -1) => {
   if(afterId === -1){
     return [

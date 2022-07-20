@@ -1,5 +1,5 @@
 import { Editor } from '@tiptap/react';
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useCallback, useContext, useMemo, useReducer } from 'react';
 import { getActions, BuilderActions } from './actions';
 import { Action, reducer } from './reducer';
 
@@ -22,16 +22,26 @@ export const usePageBuilder =
 export interface BuilderState {
   editorIds: string[],
   editorsMap: { [id: string]: Editor },
-  preview: boolean
+  preview: boolean,
+  focusedId: string | undefined
 }
 export interface BuilderContextValue {
   state: BuilderState;
 }
 
+export interface BuilderCommands {
+  commands: {
+    currentlyFocused: string | undefined
+    focusNext: () => void
+    focusPrevious: () => void
+  }
+}
+
 const initialState = {
   editorIds: [],
   editorsMap: {},
-  preview: false
+  preview: false,
+  focusedId: undefined
 }
 
 const debugReducer = (reducer: any) => (state: BuilderState, action: Action): BuilderState => {
@@ -46,9 +56,59 @@ export const useBuilder = () => {
   });
   const actions = getActions(dispatch);
 
+  //const getCurrentlyFocusedId = () => {
+  //  const focusId = state.editorIds.filter(editorId => {
+  //    if (state.editorsMap[editorId]?.isFocused) {
+  //      return editorId
+  //    }
+  //  }).pop()
+  //  console.log({ focusId, text: state.editorsMap[focusId as string]?.getText() })
+  //  return focusId
+  //}
+
+  //const focusNext = useCallback(() => {
+  //  console.log("next")
+  //  const { editorIds, editorsMap } = state
+  //  const currentlyFocused = getCurrentlyFocusedId()
+  //  if (!currentlyFocused) return
+
+  //  console.log({ currentlyFocused })
+
+  //  const idx = editorIds.indexOf(currentlyFocused)
+
+  //  console.log({ idx })
+
+  //  //if (idx + 2 >= editorIds.length) return
+
+  //  const focusId = editorIds[idx + 1] as string;
+  //  console.log({focusId})
+  //  editorsMap[focusId]?.commands.focus()
+  //}, [state.editorIds, state.editorsMap])
+
+  //const focusPrevious = useCallback(() => {
+  //  console.log("prev")
+  //  const { editorIds, editorsMap } = state
+  //  if (!currentlyFocused) return
+  //  console.log({ currentlyFocused })
+
+  //  const idx = editorIds.indexOf(currentlyFocused)
+  //  console.log({ idx })
+
+  //  if (idx < 0) return
+
+  //  const focusId = editorIds[idx] as string;
+  //  console.log({focusId})
+  //  editorsMap[focusId]?.commands.focus()
+  //}, [currentlyFocused, state.editorIds, state.editorsMap])
+
   return {
     state,
-    ...actions
+    ...actions,
+    //commands: {
+    //  currentlyFocused,
+    //  focusNext,
+    //  focusPrevious
+    //}
   };
 };
 
