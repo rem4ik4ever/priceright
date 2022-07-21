@@ -53,19 +53,25 @@ export const TextEditor = ({ id, index, onEnter, onDelete, onUp, onDown, onFocus
               }
             },
             ArrowUp: () => {
-              onUp && onUp()
-              return true;
+              if (!this.editor.state.selection.$anchor.nodeBefore) {
+                onUp && onUp()
+                return true;
+              }
+              return false
             },
             ArrowDown: () => {
-              onDown && onDown()
-              return true;
+              if (!this.editor.state.selection.$anchor.nodeAfter) {
+                onDown && onDown()
+                return true;
+              }
+              return false;
             }
           }
         },
       }),
       Placeholder.configure({
         placeholder: ({ node, editor }) => {
-          if(editor.isFocused){
+          if (editor.isFocused) {
             if (node.type.name === 'heading') {
               return 'Add heading'
             }
