@@ -11,7 +11,8 @@ export const PageBuilder = () => {
     togglePreview,
     setFocused,
     focusNext,
-    focusPrevious
+    focusPrevious,
+    updateEditorContent
   } = useBuilder()
   const { editorIds, editorsMap, preview } = state;
 
@@ -19,14 +20,14 @@ export const PageBuilder = () => {
     const idx = editorIds.indexOf(id)
     if (idx > 0) {
       const focusId = editorIds[idx - 1] as string;
-      editorsMap[focusId]?.commands.focus();
+      editorsMap[focusId]?.editor?.commands.focus();
     }
     removeBlock(id)
   }, [editorIds])
 
   const logContent = useCallback(() => {
     const content = editorIds.map(id => {
-      return editorsMap[id]?.getHTML()
+      return editorsMap[id]?.editor?.getHTML()
     })
     console.log({ content })
   }, [editorsMap, editorIds])
@@ -43,18 +44,20 @@ export const PageBuilder = () => {
         Some config area
       </div>
       <div className="w-full px-6 py-6 mx-8 bg-primary border">
-        <button type="button" onClick={logContent}>log content</button>
-        <button type="button" onClick={() => togglePreview(!preview)}>preview: {preview ? 'ON' : 'OFF'}</button>
+        <button type="button" className="border p-2 rounded-md mr-2" onClick={logContent}>log content</button>
+        <button type="button" className="border p-2 rounded-md" onClick={() => togglePreview(!preview)}>preview: {preview ? 'ON' : 'OFF'}</button>
         {editorIds.map((id: string, index: number) => (
           <div key={id}>
             <TextEditor
               id={id}
               index={index}
+              content={editorsMap[id]?.content}
               onEnter={addEditor}
               onDelete={onDelete}
               onFocus={setFocused}
               onUp={focusPrevious}
               onDown={focusNext}
+              onUpdate={updateEditorContent}
               setNodeRef={(ref) => {
                 mapEditor(ref.current.id, ref.current.editor)
               }}

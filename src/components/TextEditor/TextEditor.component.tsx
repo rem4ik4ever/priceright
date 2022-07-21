@@ -8,7 +8,7 @@ import clx from 'classnames'
 import { ElementInserter } from './ElementInserter'
 import { Menu } from './Menu'
 import { MutableRefObject, useEffect, useRef } from 'react'
-import { TextBlock } from '@components/PageBuilder/types'
+import { PageBlock } from '@components/PageBuilder/types'
 
 //const CustomDocument = Document.extend({
 //  content: 'heading block*',
@@ -17,19 +17,22 @@ import { TextBlock } from '@components/PageBuilder/types'
 interface Props {
   id: string;
   index: number;
+  content: string | undefined;
   onEnter: (id: string) => void
   onDelete: (id: string) => void
   onUp?: () => void;
   onDown?: () => void;
   onFocus?: (id: string, props?: EditorEvents['focus']) => void;
-  setNodeRef: (ref: MutableRefObject<TextBlock>) => void
+  onUpdate?: (id: string, props?: EditorEvents['update']) => void;
+  setNodeRef: (ref: MutableRefObject<PageBlock>) => void
   preview: boolean
 }
-export const TextEditor = ({ id, index, onEnter, onDelete, onUp, onDown, onFocus, setNodeRef, preview }: Props) => {
-  const ref = useRef<TextBlock>()
+export const TextEditor = ({ id, index, content, onEnter, onDelete, onUpdate, onUp, onDown, onFocus, setNodeRef, preview }: Props) => {
+  const ref = useRef<PageBlock>()
   const editor = useEditor({
     editable: !preview,
     onFocus: (props) => onFocus && onFocus(id, props),
+    onUpdate: (props) => onUpdate && onUpdate(id, props),
     extensions: [
       StarterKit.configure({ document: false }),
       Typography,
@@ -81,7 +84,7 @@ export const TextEditor = ({ id, index, onEnter, onDelete, onUp, onDown, onFocus
         },
       }),
     ],
-    content: ``,
+    content: content || '',
     editorProps: {
       attributes: {
         class: editorStyles.root as string,
@@ -93,7 +96,7 @@ export const TextEditor = ({ id, index, onEnter, onDelete, onUp, onDown, onFocus
     if (editor) {
       editor?.commands.focus();
       ref.current = { id, editor }
-      setNodeRef(ref as MutableRefObject<TextBlock>)
+      setNodeRef(ref as MutableRefObject<PageBlock>)
     }
   }, [editor])
 
@@ -109,7 +112,6 @@ export const TextEditor = ({ id, index, onEnter, onDelete, onUp, onDown, onFocus
   return (
     <>
       <Menu editor={editor} />
-      {id}
       <EditorContent className={editorStyles.root} editor={editor} />
       <ElementInserter editor={editor} />
     </>

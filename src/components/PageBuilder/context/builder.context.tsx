@@ -1,7 +1,8 @@
-import { Editor } from '@tiptap/react';
-import React, { createContext, useCallback, useContext, useMemo, useReducer } from 'react';
+import React, { createContext, useContext, useReducer } from 'react';
+import { PageBlock } from '../types';
 import { getActions, BuilderActions } from './actions';
 import { Action, reducer } from './reducer';
+import { v4 } from 'uuid'
 
 function createCtx() {
   const ctx = createContext(undefined);
@@ -21,7 +22,7 @@ export const usePageBuilder =
 
 export interface BuilderState {
   editorIds: string[],
-  editorsMap: { [id: string]: Editor },
+  editorsMap: { [id: string]: PageBlock },
   preview: boolean,
   focusedId: string | undefined
 }
@@ -37,7 +38,7 @@ export interface BuilderCommands {
   }
 }
 
-const initialState = {
+const _initialState:BuilderState = {
   editorIds: [],
   editorsMap: {},
   preview: false,
@@ -50,9 +51,25 @@ const debugReducer = (reducer: any) => (state: BuilderState, action: Action): Bu
   return next;
 }
 
-export const useBuilder = () => {
+const initialState = (template?: string[]): BuilderState => {
+  const state = { ..._initialState }
+  if (template) {
+    template.forEach(blockContent => {
+      const id = v4()
+      state.editorIds.push(id)
+      state.editorsMap[id] = {
+        id,
+        editor: undefined,
+        content: blockContent
+      } as any
+    })
+  }
+  return state;
+}
+
+export const useBuilder = (template?: string[]) => {
   const [state, dispatch] = useReducer(debugReducer(reducer), {
-    ...initialState,
+    ...initialState(template),
   });
   const actions = getActions(dispatch);
 
@@ -64,12 +81,14 @@ export const useBuilder = () => {
 
 interface IPageBuilderContextProvider {
   children: React.ReactNode;
+  template?: string[]
 }
 
 export const PageBuilderContextProvider = ({
   children,
+  template
 }: IPageBuilderContextProvider): JSX.Element => {
-  const state = useBuilder();
+  const state = useBuilder(template);
   const Provider = _BuilderContextProvider as React.FC<{ value: BuilderContextValue, children: React.ReactNode }>
   return (
     <Provider value={state}>

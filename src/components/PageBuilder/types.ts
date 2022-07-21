@@ -1,6 +1,7 @@
 import { Editor } from "@tiptap/react";
 
-export type TextBlock = {
+export type PageBlock = {
   id: string;
   editor: Editor;
+  content?: string;
 }
