@@ -1,0 +1,11 @@
+.root {
+  @apply bg-accent-0 min-w-[200px] max-w-[300px] max-h-[230px] overflow-auto;
+}
+
+.itemsContainer{
+  @apply flex flex-col border;
+}
+
+.item {
+  @apply px-2 py-3 hover:bg-accent-2 text-left border-b last:border-none;
+}

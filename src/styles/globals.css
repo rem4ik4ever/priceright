@@ -5,3 +5,4 @@
 @import './component.css';
 
 @tailwind utilities;
+@import './editor.css';

@@ -1,0 +1,11 @@
+.root {
+  @apply prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none;
+}
+
+.root:focus:before {
+  position: absolute;
+  left: -15px;
+  content: '||';
+  @apply text-accent-5;
+}
+
