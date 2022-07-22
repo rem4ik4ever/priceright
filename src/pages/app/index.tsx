@@ -1,6 +1,6 @@
 import { FormBuilder } from "@components/FormBuilder";
-import { PageBuilderContextProvider } from "@components/PageBuilder/context/builder.context";
-import { PageBuilder } from "@components/PageBuilder/PageBuilder.component";
+import { PageBuilder } from "@components/PageBuilder";
+import { PageBuilderContextProvider } from "@components/PageBuilder/context";
 import { NextPage } from "next";
 
 const App: NextPage = () => {

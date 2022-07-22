@@ -1,4 +1,4 @@
-import { useEditor, EditorContent, BubbleMenu, Editor, EditorEvents } from '@tiptap/react'
+import { useEditor, EditorContent, BubbleMenu, Editor, EditorEvents, HTMLContent } from '@tiptap/react'
 import Document from '@tiptap/extension-document'
 import { Typography } from '@tiptap/extension-typography'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -8,7 +8,8 @@ import clx from 'classnames'
 import { ElementInserter } from './ElementInserter'
 import { Menu } from './Menu'
 import { MutableRefObject, useEffect, useRef } from 'react'
-import { TextBlock } from '@components/PageBuilder/types'
+import { PageBlock } from '@components/PageBuilder/types'
+import { useBuilder } from '@components/PageBuilder/context'
 
 //const CustomDocument = Document.extend({
 //  content: 'heading block*',
@@ -17,19 +18,38 @@ import { TextBlock } from '@components/PageBuilder/types'
 interface Props {
   id: string;
   index: number;
+  content: string | undefined;
   onEnter: (id: string) => void
   onDelete: (id: string) => void
   onUp?: () => void;
   onDown?: () => void;
   onFocus?: (id: string, props?: EditorEvents['focus']) => void;
-  setNodeRef: (ref: MutableRefObject<TextBlock>) => void
+  onUpdate?: (id: string, props?: EditorEvents['update']) => void;
+  onUndo?: () => void,
+  onRedo?: () => void,
+  setNodeRef: (ref: MutableRefObject<PageBlock>) => void
   preview: boolean
 }
-export const TextEditor = ({ id, index, onEnter, onDelete, onUp, onDown, onFocus, setNodeRef, preview }: Props) => {
-  const ref = useRef<TextBlock>()
+export const TextEditor = ({
+  id,
+  index, 
+  content, 
+  onEnter, 
+  onDelete, 
+  onUpdate, 
+  onUp, 
+  onDown, 
+  onFocus, 
+  onUndo,
+  onRedo,
+  setNodeRef, 
+  preview 
+}: Props) => {
+  const ref = useRef<PageBlock>()
   const editor = useEditor({
     editable: !preview,
     onFocus: (props) => onFocus && onFocus(id, props),
+    onUpdate: (props) => onUpdate && onUpdate(id, props),
     extensions: [
       StarterKit.configure({ document: false }),
       Typography,
@@ -65,7 +85,22 @@ export const TextEditor = ({ id, index, onEnter, onDelete, onUp, onDown, onFocus
                 return true;
               }
               return false;
-            }
+            },
+            //'Mod-z': () => {
+            //  console.log(this.editor)
+            //  if(onUndo) {
+            //    onUndo()
+            //    return true;
+            //  }
+            //  return false
+            //},
+            //'Mod-Shift-z': () => {
+            //  if(onRedo) {
+            //    onRedo()
+            //    return true;
+            //  }
+            //  return false
+            //}
           }
         },
       }),
@@ -81,19 +116,19 @@ export const TextEditor = ({ id, index, onEnter, onDelete, onUp, onDown, onFocus
         },
       }),
     ],
-    content: ``,
+    content: content || '',
     editorProps: {
       attributes: {
         class: editorStyles.root as string,
       }
     },
-  })
+  }, [])
 
   useEffect(() => {
     if (editor) {
-      editor?.commands.focus();
+      editor?.commands.focus('end');
       ref.current = { id, editor }
-      setNodeRef(ref as MutableRefObject<TextBlock>)
+      setNodeRef(ref as MutableRefObject<PageBlock>)
     }
   }, [editor])
 
@@ -105,11 +140,9 @@ export const TextEditor = ({ id, index, onEnter, onDelete, onUp, onDown, onFocus
     editor.setEditable(!preview)
   }, [editor, preview])
 
-
   return (
     <>
       <Menu editor={editor} />
-      {id}
       <EditorContent className={editorStyles.root} editor={editor} />
       <ElementInserter editor={editor} />
     </>
