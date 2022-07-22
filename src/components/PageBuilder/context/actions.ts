@@ -10,6 +10,8 @@ export interface BuilderActions {
   focusNext: () => void;
   focusPrevious: () => void;
   updateEditorContent: (id: string) => void;
+  undo: () => void;
+  redo: () => void;
 }
 
 export const getActions = (dispatch: (action: Action) => void): BuilderActions => {
@@ -21,6 +23,9 @@ export const getActions = (dispatch: (action: Action) => void): BuilderActions =
     setFocused: (id) => dispatch({type: 'SET_FOCUSED', id}),
     focusNext: () => dispatch({type: 'FOCUS_NEXT'}),
     focusPrevious: () => dispatch({type: 'FOCUS_PREVIOUS'}),
-    updateEditorContent: (id) => dispatch({type: 'UPDATE_EDITOR_CONTENT', id})
+    updateEditorContent: (id) => dispatch({type: 'UPDATE_EDITOR_CONTENT', id}),
+    undo: () => dispatch({type: 'UNDO'}),
+    redo: () => dispatch({type: 'REDO'})
+
   }
 }

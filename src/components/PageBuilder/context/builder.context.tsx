@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import { PageBlock } from '../types';
 import { getActions, BuilderActions } from './actions';
 import { Action, reducer } from './reducer';
 import { v4 } from 'uuid'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 function createCtx() {
   const ctx = createContext(undefined);
@@ -20,11 +21,17 @@ export const usePageBuilder =
   _useBuilerContext as () => BuilderContextValue & BuilderActions
 
 
+export interface BuildHistory {
+  stack: Array<Omit<BuilderState, 'preview' | 'history'>>,
+  cursor: number
+}
+
 export interface BuilderState {
   editorIds: string[],
   editorsMap: { [id: string]: PageBlock },
   preview: boolean,
   focusedId: string | undefined
+  history: BuildHistory
 }
 export interface BuilderContextValue {
   state: BuilderState;
@@ -38,11 +45,15 @@ export interface BuilderCommands {
   }
 }
 
-const _initialState:BuilderState = {
+const _initialState: BuilderState = {
   editorIds: [],
   editorsMap: {},
   preview: false,
-  focusedId: undefined
+  focusedId: undefined,
+  history: {
+    stack: [],
+    cursor: -1,
+  },
 }
 
 const debugReducer = (reducer: any) => (state: BuilderState, action: Action): BuilderState => {
@@ -88,10 +99,12 @@ export const PageBuilderContextProvider = ({
   children,
   template
 }: IPageBuilderContextProvider): JSX.Element => {
-  const state = useBuilder(template);
+  const contextValue = useBuilder(template);
   const Provider = _BuilderContextProvider as React.FC<{ value: BuilderContextValue, children: React.ReactNode }>
+//  useHotkeys('cmd + z', () => contextValue.undo())
+// useHotkeys('cmd + shift + z', () => contextValue.redo())
   return (
-    <Provider value={state}>
+    <Provider value={contextValue}>
       {children}
     </Provider>
   );

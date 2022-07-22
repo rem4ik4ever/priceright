@@ -12,7 +12,9 @@ export const PageBuilder = () => {
     setFocused,
     focusNext,
     focusPrevious,
-    updateEditorContent
+    updateEditorContent,
+    undo,
+    redo
   } = useBuilder()
   const { editorIds, editorsMap, preview } = state;
 
@@ -57,6 +59,8 @@ export const PageBuilder = () => {
               onFocus={setFocused}
               onUp={focusPrevious}
               onDown={focusNext}
+              onUndo={undo}
+              onRedo={redo}
               onUpdate={updateEditorContent}
               setNodeRef={(ref) => {
                 mapEditor(ref.current.id, ref.current.editor)

@@ -4,7 +4,11 @@ import {
   addBlock,
   updateEditorContent,
   focusNext,
-  focusPrevious
+  focusPrevious,
+  removeBlock,
+  setFocused,
+  undoState,
+  redoState
 } from './editor'
 
 export type Action = {type: 'ADD_BLOCK', afterId: string | -1} 
@@ -15,15 +19,14 @@ export type Action = {type: 'ADD_BLOCK', afterId: string | -1}
   | {type: 'FOCUS_NEXT' }
   | {type: 'FOCUS_PREVIOUS' }
   | {type: 'UPDATE_EDITOR_CONTENT', id: string}
+  | {type: 'UNDO'}
+  | {type: 'REDO'}
 
 
 export const reducer = (state: BuilderState, action: Action): BuilderState=> {
   switch(action.type){
     case 'ADD_BLOCK': {
-      return {
-        ...state,
-        editorIds: addBlock(state.editorIds, action.afterId)
-      }
+      return addBlock(state, action.afterId)
     }
     case 'MAP_EDITOR': {
       return {
@@ -45,16 +48,10 @@ export const reducer = (state: BuilderState, action: Action): BuilderState=> {
       }
     }
     case 'REMOVE_BLOCK': {
-      return {
-        ...state,
-        editorIds: state.editorIds.filter(editorId => editorId !== action.id)
-      }
+      return removeBlock(state, action.id)
     }
     case 'SET_FOCUSED': {
-      return {
-        ...state,
-        focusedId: action.id
-      }
+      return setFocused(state, action.id)
     }
     case 'FOCUS_NEXT': {
       return focusNext(state)
@@ -64,6 +61,12 @@ export const reducer = (state: BuilderState, action: Action): BuilderState=> {
     }
     case 'UPDATE_EDITOR_CONTENT': {
       return updateEditorContent(state, action.id)
+    }
+    case 'UNDO': {
+      return undoState(state);
+    }
+    case 'REDO': {
+      return redoState(state)
     }
     default:
       return state;

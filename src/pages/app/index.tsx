@@ -4,11 +4,8 @@ import { PageBuilderContextProvider } from "@components/PageBuilder/context";
 import { NextPage } from "next";
 
 const App: NextPage = () => {
-  const restoreTemplate = [
-   
-  ]
   return (
-    <PageBuilderContextProvider template={restoreTemplate}>
+    <PageBuilderContextProvider>
       <PageBuilder />
     </PageBuilderContextProvider>
   )
