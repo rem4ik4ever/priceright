@@ -1,5 +1,5 @@
 .root {
-  @apply bg-accent-0 min-w-[200px] max-w-[300px] max-h-[230px] overflow-auto;
+  @apply bg-accent-0 min-w-[200px] max-w-[300px] max-h-[230px] overflow-auto z-[10000] shadow-sm;
 }
 
 .itemsContainer{

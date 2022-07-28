@@ -57,6 +57,12 @@ export const TextEditor = ({
         addKeyboardShortcuts() {
           return {
             Enter: () => {
+              const lastNodeType = this.editor.state.doc.lastChild?.type.name
+              console.log({editor: this.editor.state.tr})
+              if(lastNodeType?.toLocaleLowerCase()?.includes('list')){
+                // trigger add new editor with bulletList
+                //return false;
+              }
               this.editor.commands.blur();
               onEnter(id)
               return true;
@@ -144,7 +150,7 @@ export const TextEditor = ({
     <>
       <Menu editor={editor} />
       <EditorContent className={editorStyles.root} editor={editor} />
-      <ElementInserter editor={editor} />
+      {editor && <ElementInserter  editor={editor} tippyOptions={{duration: 100}} /> }
     </>
   )
 }

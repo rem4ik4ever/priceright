@@ -1,31 +1,53 @@
+import {ElementInserterPlugin, ElementInserterPluginProps} from '.'
 import { Editor } from "@tiptap/react"
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { ElementsDropdown } from "./ElementsDropdown.component"
 
-interface Props {
-  editor: Editor | null
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>
+
+export type ElementInserterProps = Omit<Optional<ElementInserterPluginProps, 'pluginKey'>, 'element'> & {
+  className?: string,
+  children?: React.ReactNode
 }
-export const ElementInserter = ({ editor }: Props) => {
-  const content = editor?.getText()
 
-  const showDropdown = useMemo(() => {
-    if (!content) return false;
+export const ElementInserter = (props: ElementInserterProps) => {
+  const [element, setElement] = useState<HTMLDivElement | null>(null)
 
-    return (/^\/([a-zA-Z0-9]+)?/).test(content)
-  }, [content])
+  useEffect(() => {
+    if(!element){
+      return 
+    }
 
-  const handleSelect = (item: string) => {
-    console.log(item)
-    editor?.chain().deleteRange({from: 0, to: (content?.length || 0) + 1}).insertContent('<h1></h1>').focus().run()
-  }
+    if(props.editor.isDestroyed) {
+      return
+    }
 
-  if (!editor || !content) {
-    return null;
-  }
+    const {
+      pluginKey = 'bubbleMenu',
+      editor,
+      tippyOptions = {},
+      shouldShow = null,
+    } = props
+
+    const plugin = ElementInserterPlugin({
+      pluginKey,
+      editor,
+      element,
+      tippyOptions,
+      shouldShow
+    })
+
+    editor.registerPlugin(plugin)
+
+    return () => editor.unregisterPlugin(pluginKey)
+  }, [
+    props.editor,
+    element
+  ])
 
   return (
-    <div>
-      <ElementsDropdown open={showDropdown} onSelect={handleSelect} />
+    <div ref={setElement} className={props.className} style={{visibility: 'hidden'}}>
+      <ElementsDropdown onSelect={(item) => console.log(item)}/>
     </div>
   )
 }
