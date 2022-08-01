@@ -65,29 +65,12 @@ export const MentionList = forwardRef<MentionListRef, MentionListProps>((props, 
       <ul className={styles.itemsContainer}>
         {props.items.length ? 
           props.items.map((item, index) => (
-          <li key={item} className={clx(styles.item, index === selectedIndex && styles.isSelected)}>
-            <button onClick={() => selectItem(index)} key={item}>{item}</button>
+          <li key={item.title} className={clx(styles.item, index === selectedIndex && styles.isSelected)}>
+            <button onClick={() => selectItem(index)} key={item.title}>{item.title}</button>
           </li>
         )) : 
         <div className={styles.item}>No result</div>}
       </ul>
-    </div>
-  )
-
-  return (
-    <div className="items">
-      {props.items.length
-        ? props.items.map((item, index) => (
-          <button
-            className={`item ${index === selectedIndex ? 'is-selected' : ''}`}
-            key={index}
-            onClick={() => selectItem(index)}
-          >
-            {item}
-          </button>
-        ))
-        : <div className="item">No result</div>
-      }
     </div>
   )
 })

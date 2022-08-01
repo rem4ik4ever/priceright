@@ -26,30 +26,54 @@ export const Command = Node.create<CommandOptions>({
       suggestion: {
         char: '/',
         pluginKey: CommandPluginKey,
-        command: ({ editor, range, props }) => {
+        command: (commandProps) => {
+          const { editor, range, props } = commandProps
+          console.log({commandProps})
           // increase range.to by one when the next node is of type "text"
           // and starts with a space character
           const nodeAfter = editor.view.state.selection.$to.nodeAfter
           const overrideSpace = nodeAfter?.text?.startsWith(' ')
 
+          console.log({props})
+          const command = props.id
           if (overrideSpace) {
             range.to += 1
           }
 
-          editor
-            .chain()
-            .focus()
-            .insertContentAt(range, [
-              {
-                type: this.name,
-                attrs: props,
-              },
+          const content = [
               {
                 type: 'text',
                 text: ' ',
               },
-            ])
-            .run()
+          ]
+          let execution = editor
+            .chain()
+            .deleteRange(range)
+
+          switch(command.type) {
+            case "heading": 
+              execution.focus('end').insertContent([
+                {
+                  type: 'heading',
+                  attrs: command.attrs
+                }
+              ]).run()
+              break;
+            case "bulletList":
+                execution.focus('end').toggleBulletList().run();
+                break;
+            case "orderedList":
+                execution.focus('end').toggleOrderedList().run();
+                break;
+            case "paragraph": 
+              execution.focus('end').insertContent({
+                type: 'paragraph',
+              }).run();
+              break;
+            default: 
+              console.warn('No command found')
+              break;
+          }
 
           window.getSelection()?.collapseToEnd()
         },
@@ -68,9 +92,9 @@ export const Command = Node.create<CommandOptions>({
 
   inline: true,
 
-  selectable: false,
+  selectable: true,
 
-  atom: true,
+  atom: false,
 
   addAttributes() {
     return {

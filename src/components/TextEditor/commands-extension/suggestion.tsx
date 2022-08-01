@@ -9,33 +9,45 @@ import { RefAttributes } from 'react'
 export const suggestion: CommandOptions['suggestion'] = {
   items: ({ query }) => {
     return [
-      'Lea Thompson',
-      'Cyndi Lauper',
-      'Tom Cruise',
-      'Madonna',
-      'Jerry Hall',
-      'Joan Collins',
-      'Winona Ryder',
-      'Christina Applegate',
-      'Alyssa Milano',
-      'Molly Ringwald',
-      'Ally Sheedy',
-      'Debbie Harry',
-      'Olivia Newton-John',
-      'Elton John',
-      'Michael J. Fox',
-      'Axl Rose',
-      'Emilio Estevez',
-      'Ralph Macchio',
-      'Rob Lowe',
-      'Jennifer Grey',
-      'Mickey Rourke',
-      'John Cusack',
-      'Matthew Broderick',
-      'Justine Bateman',
-      'Lisa Bonet',
+      {
+        title: 'Heading 1',
+        type: 'heading',
+        attrs: {
+          level: 1
+        }
+      },
+      {
+        title: 'Heading 2',
+        type: 'heading',
+        attrs: {
+          level: 2
+        }
+      },
+      {
+        title: 'Heading 3',
+        type: 'heading',
+        attrs: {
+          level: 3
+        }
+      },
+      {
+        title: 'Bullet List',
+        type: 'bulletList',
+      },
+      {
+        title: 'Ordered List',
+        type: 'orderedList',
+      },
+      {
+        title: 'Paragraph',
+        type: 'paragraph',
+      },
+      {
+        title: 'Button',
+        type: 'button',
+      }
     ]
-      .filter(item => item.toLowerCase().startsWith(query.toLowerCase()))
+      .filter(item => item.title.toLowerCase().startsWith(query.toLowerCase()))
       .slice(0, 5)
   },
 
