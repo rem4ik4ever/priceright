@@ -2,27 +2,56 @@ import { PageBlock } from '@components/PageBuilder/types';
 import {v4} from 'uuid'
 import { BuilderState } from '../builder.context'
 
-export const addBlock = (state: BuilderState, afterId: string | -1): BuilderState => {
+const addEditorsMapEntry = (editorsMap: BuilderState['editorsMap'], id: string, afterId: string | undefined): BuilderState['editorsMap'] => {
+  if(!afterId || !editorsMap[afterId]?.editor){
+    return {
+      ...editorsMap
+    }
+  }
+  const prevEditor = editorsMap[afterId]?.editor;
+  if(!prevEditor){
+    return {
+      ...editorsMap
+    }
+  }
+  const type = prevEditor.state.doc.lastChild?.type.name.toLocaleLowerCase()
+  console.log({type})
+  switch(type) {
+    case "bulletlist": 
+      return {
+        ...editorsMap,
+        [id]: { id, content: '<ul><li></li></ul>', editor: undefined as any }
+      }
+    default: 
+      return {
+        ...editorsMap
+      }
+  }
+}
+
+export const addBlock = (state: BuilderState, afterId: string | undefined): BuilderState => {
   const {editorIds} = state;
   let newState = {...state}
-  if(afterId === -1){
+  const id = v4()
+  if(!afterId){
     newState = {
       ...state,
-        editorIds: [
-        v4(),
+      editorIds: [
+        id,
         ...editorIds
       ]
     }
   } else {
-
     const index = editorIds.indexOf(afterId)
     newState = {
       ...state,
+      lastEditorId: afterId,
       editorIds: [
         ...editorIds.slice(0, index + 1),
-        v4(),
+        id,
         ...editorIds.slice(index + 1)
-      ]
+      ],
+      editorsMap: addEditorsMapEntry(state.editorsMap, id, afterId)
     }
   }
   return recordHistory(newState)

@@ -9,3 +9,7 @@
 .item {
   @apply px-2 py-3 hover:bg-accent-2 text-left border-b last:border-none;
 }
+
+.isSelected {
+  @apply bg-accent-2;
+}

@@ -55,9 +55,15 @@ export class ElementInserterView {
     //  && isTextSelection(statex.selection)
 
     const text = doc.textContent
+    const regexp = /\/([a-zA-Z0-9]+)?/
 
-    const isMatch = (/\/([a-zA-Z0-9]+)?/).test(text)
-    console.log({isMatch, text})
+    const isMatch = (regexp).test(text)
+    //const matches = text.match(regexp)
+    //if(matches && matches.length > 0){
+    //  const word = matches.pop() as string
+    //  doc.cut(from - word.length, to)
+    //}
+    console.log({isMatch, text, from, to})
 
     if (
       !view.hasFocus()
@@ -95,7 +101,7 @@ export class ElementInserterView {
   }
 
   mousedownHandler = () => {
-    this.preventHide = true
+    this.preventHide = false
   }
 
   dragstartHandler = () => {

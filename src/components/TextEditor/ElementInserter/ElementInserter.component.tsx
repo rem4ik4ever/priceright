@@ -1,6 +1,6 @@
 import {ElementInserterPlugin, ElementInserterPluginProps} from '.'
 import { Editor } from "@tiptap/react"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { ElementsDropdown } from "./ElementsDropdown.component"
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>
@@ -45,9 +45,37 @@ export const ElementInserter = (props: ElementInserterProps) => {
     element
   ])
 
+  const onSelect = useCallback((item: string) => {
+    console.log({item})
+    const {doc} = props.editor.state
+    const text = doc.textContent
+    const regexp = /\/([a-zA-Z0-9]+)?/
+    const matches = text.match(regexp)
+    console.log({matches})
+    if(matches && matches.length > 0){
+      const word = matches.pop() as string
+      const from = (matches.index || 0) + 1
+      const to = from + word.length + 1
+      console.log({word, from, to})
+      props.editor.commands.deleteRange({from, to})
+    }
+    props.editor.chain().enter().setHeading({level: 1}).focus('end').run();
+  }, [props.editor])
+
+
+  //const showDropdown = useMemo(() => {
+  //  if (!content) return false;
+
+  //  return (/^\/([a-zA-Z0-9]+)?/).test(content)
+  //}, [content])
+
+  //const handleSelect = (item: string) => {
+  //  editor?.chain().deleteRange({from: 0, to: (content?.length || 0) + 1}).insertContent('<h1></h1>').focus().run()
+  //}
+
   return (
     <div ref={setElement} className={props.className} style={{visibility: 'hidden'}}>
-      <ElementsDropdown onSelect={(item) => console.log(item)}/>
+      <ElementsDropdown onSelect={onSelect}/>
     </div>
   )
 }
