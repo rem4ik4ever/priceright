@@ -70,6 +70,15 @@ export const Command = Node.create<CommandOptions>({
                 type: 'paragraph',
               }).run();
               break;
+            case "button": 
+              execution.focus('end').insertContent({
+                type: 'button',
+                attrs: {
+                  url: 'https://example.com',
+                  label: 'my button'
+                }
+              }).run()
+              break;
             default: 
               console.warn('No command found')
               break;

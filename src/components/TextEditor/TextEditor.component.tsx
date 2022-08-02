@@ -1,38 +1,32 @@
 import { useEditor, EditorContent, BubbleMenu, Editor, EditorEvents, HTMLContent } from '@tiptap/react'
-import Document from '@tiptap/extension-document'
 import { Typography } from '@tiptap/extension-typography'
 import Placeholder from '@tiptap/extension-placeholder'
 import StarterKit from '@tiptap/starter-kit'
 import editorStyles from './TextEditor.module.css'
-import clx from 'classnames'
-import { ElementInserter } from './ElementInserter'
 import { Menu } from './Menu'
-import { MutableRefObject, useEffect, useRef, useState } from 'react'
-import { PageBlock } from '@components/PageBuilder/types'
-import { useBuilder } from '@components/PageBuilder/context'
+import { useEffect } from 'react'
 import Command from './commands-extension'
 import {suggestion} from './commands-extension'
-
-//const CustomDocument = Document.extend({
-//  content: 'heading block*',
-//})
+import {TextAlign} from '@tiptap/extension-text-align'
+import Button from './nodes/button/button'
 
 interface Props {
-  id: string;
   content: string | undefined;
   preview: boolean
 }
 export const TextEditor = ({
-  id,
   content, 
   preview 
 }: Props) => {
-  const ref = useRef<PageBlock>()
   const editor = useEditor({
-    editable: !preview,
     extensions: [
       StarterKit,
       Typography,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+        defaultAlignment: 'left'
+      }),
+      Button,
       Command.configure({
         HTMLAttributes: {
           class: 'mention'
@@ -63,7 +57,7 @@ export const TextEditor = ({
     if (!editor) {
       return undefined
     }
-
+    console.log({preview})
     editor.setEditable(!preview)
   }, [editor, preview])
 

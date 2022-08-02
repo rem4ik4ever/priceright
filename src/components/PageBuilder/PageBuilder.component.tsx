@@ -7,7 +7,7 @@ export const PageBuilder = () => {
     state,
     togglePreview,
   } = useBuilder()
-  const { id, content, preview } = state;
+  const { content, preview } = state;
 
   const logContent = useCallback(() => {
     console.log({ content })
@@ -22,7 +22,6 @@ export const PageBuilder = () => {
         <button type="button" className="border p-2 rounded-md mr-2" onClick={logContent}>log content</button>
         <button type="button" className="border p-2 rounded-md" onClick={() => togglePreview(!preview)}>preview: {preview ? 'ON' : 'OFF'}</button>
         <TextEditor
-          id={id}
           content={content}
           preview={preview}
         />

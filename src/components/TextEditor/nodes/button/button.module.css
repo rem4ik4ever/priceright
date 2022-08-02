@@ -1,0 +1,8 @@
+
+.root {
+  @apply my-2;
+}
+
+.button {
+  @apply border px-3 py-2 rounded-md shadow-sm box-content;
+}
