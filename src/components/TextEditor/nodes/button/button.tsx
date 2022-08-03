@@ -9,6 +9,8 @@ export default Node.create({
 
   atom: true,
 
+  draggable: true,
+  
   addAttributes() {
     return {
       url: {

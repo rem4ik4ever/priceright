@@ -1,14 +1,8 @@
-import { useEditor, EditorContent, BubbleMenu, Editor, EditorEvents, HTMLContent } from '@tiptap/react'
-import { Typography } from '@tiptap/extension-typography'
-import Placeholder from '@tiptap/extension-placeholder'
-import StarterKit from '@tiptap/starter-kit'
+import { useEditor, EditorContent } from '@tiptap/react'
 import editorStyles from './TextEditor.module.css'
 import { Menu } from './Menu'
 import { useEffect } from 'react'
-import Command from './commands-extension'
-import {suggestion} from './commands-extension'
-import {TextAlign} from '@tiptap/extension-text-align'
-import Button from './nodes/button/button'
+import {extensions} from './extensions'
 
 interface Props {
   content: string | undefined;
@@ -19,32 +13,7 @@ export const TextEditor = ({
   preview 
 }: Props) => {
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Typography,
-      TextAlign.configure({
-        types: ['heading', 'paragraph'],
-        defaultAlignment: 'left'
-      }),
-      Button,
-      Command.configure({
-        HTMLAttributes: {
-          class: 'mention'
-        },
-        suggestion
-      }),
-      Placeholder.configure({
-        placeholder: ({ node, editor }) => {
-          if (editor.isFocused) {
-            if (node.type.name === 'heading') {
-              return 'Add heading'
-            }
-            return 'Insert elements by typing "/"'
-          }
-          return ''
-        },
-      }),
-    ],
+    extensions,
     content: content || '',
     editorProps: {
       attributes: {

@@ -1,5 +1,7 @@
 import { NodeViewContent, NodeViewRendererProps, NodeViewWrapper } from "@tiptap/react"
 import styles from './button.module.css'
+import clx from 'classnames'
+import { useMemo } from "react"
 
 export interface ButtonProps {
   url: string
@@ -8,26 +10,32 @@ export interface ButtonProps {
 
 export const Button = (props: NodeViewRendererProps) => {
   const {editor, node} = props;
-  const {url, label} = node.attrs;
+  const {url, label, ...attrs} = node.attrs;
 
   const {editable} = editor.options
-  console.log({editable})
 
-  if(!editable) {
-    <NodeViewWrapper className={styles.root}>
-      <a href={url}>
-        <button type="button" className={styles.button}>
-          {label}
-        </button>
-      </a>
-    </NodeViewWrapper>
-  }
+  const render = useMemo(() => {
+    if(!editable){
+      return (
+        <a href={url}>
+          <button type="button" className={styles.button} draggable="true">
+            <span data-drag-handle="">
+              {label}
+            </span>
+          </button>
+        </a>
+      )     
+    }
+    return  (
+      <button type="button" className={styles.button} draggable="true">
+        <span data-drag-handle="">{label}</span>
+      </button>
+    )
+  }, [editable])
 
   return (
-    <NodeViewWrapper className={styles.root}>
-      <button type="button" className={styles.button}>
-        {label}
-      </button>
+    <NodeViewWrapper className={clx(styles.root, styles[attrs.textAlign])}>
+      {render}
     </NodeViewWrapper>
   )
 }
