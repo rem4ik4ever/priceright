@@ -1,0 +1,48 @@
+.root { 
+  @apply px-2 transition-all py-3;
+
+  & > .bottomControls .topControls {
+    @apply -z-50;
+  }
+
+  &:hover {
+    @apply outline-dotted outline-blue-400 outline-1 z-10;
+
+    & > .bottomControls .topControls {
+      @apply z-0;
+    }
+  }
+}
+
+.focused {
+  @apply outline-dotted outline-blue-400 outline-1;
+}
+
+.bottomControls{
+  @apply absolute w-full flex justify-center -mt-4 pt-4 opacity-0;
+
+  &:hover {
+    @apply opacity-100;
+  }
+}
+
+.topControls{
+  @apply absolute w-full flex justify-center -mt-6 pb-4 opacity-0;
+
+  &:hover {
+    @apply opacity-100;
+  }
+
+  &:not(:first-child) {
+    @apply hidden;
+  }
+}
+
+
+.insertSectionButton {
+  @apply text-sm px-1 rounded-sm bg-orange-light text-accent-0 transition-all flex justify-self-center;
+
+  &:hover {
+    @apply bg-orange;
+  }
+}

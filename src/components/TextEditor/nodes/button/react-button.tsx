@@ -18,8 +18,8 @@ export const Button = (props: NodeViewRendererProps) => {
     if(!editable){
       return (
         <a href={url}>
-          <button type="button" className={styles.button} draggable="true">
-            <span data-drag-handle="">
+          <button type="button" className={styles.button}>
+            <span>
               {label}
             </span>
           </button>
@@ -27,14 +27,14 @@ export const Button = (props: NodeViewRendererProps) => {
       )     
     }
     return  (
-      <button type="button" className={styles.button} draggable="true">
-        <span data-drag-handle="">{label}</span>
+      <button type="button" className={styles.button}>
+        <span>{label}</span>
       </button>
     )
   }, [editable])
 
   return (
-    <NodeViewWrapper className={clx(styles.root, styles[attrs.textAlign])}>
+    <NodeViewWrapper className={clx(styles.root, styles[attrs.textAlign])} draggable="true" contentEditable={false}>
       {render}
     </NodeViewWrapper>
   )

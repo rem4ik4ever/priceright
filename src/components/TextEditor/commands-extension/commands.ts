@@ -79,6 +79,15 @@ export const Command = Node.create<CommandOptions>({
                 }
               }).run()
               break;
+            case 'columns': 
+              execution.focus('end').insertContent([{
+                type: 'columns',
+                content: [
+                  {type: 'column', content: [{type: 'paragraph'}]},
+                  {type: 'column', content: [{type: 'paragraph'}]}
+                ]
+              }]).run()
+              break;
             default: 
               console.warn('No command found')
               break;

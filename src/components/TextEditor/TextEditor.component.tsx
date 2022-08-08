@@ -14,7 +14,11 @@ export const TextEditor = ({
 }: Props) => {
   const editor = useEditor({
     extensions,
-    content: content || '',
+    content: `
+      <page-section>
+        <p>Make something amazing!</p>
+      </page-section>
+    `,
     editorProps: {
       attributes: {
         class: editorStyles.root as string,

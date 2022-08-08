@@ -2,14 +2,18 @@ import { Node, mergeAttributes } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import {Button} from './react-button'
 
-export default Node.create({
+interface ButtonProps {
+  url: string;
+  label: string;
+}
+export default Node.create<ButtonProps>({
   name: 'button',
 
   group: 'block',
 
-  atom: true,
-
   draggable: true,
+
+  content: '',
   
   addAttributes() {
     return {
@@ -31,7 +35,7 @@ export default Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['tip-button', mergeAttributes(HTMLAttributes), 0]
+    return ['tip-button', mergeAttributes(HTMLAttributes)]
   },
   addNodeView() {
     return ReactNodeViewRenderer(Button)

@@ -45,6 +45,10 @@ export const suggestion: CommandOptions['suggestion'] = {
       {
         title: 'Button',
         type: 'button',
+      },
+      {
+        title: 'Columns',
+        type: 'columns',
       }
     ]
       .filter(item => item.title.toLowerCase().startsWith(query.toLowerCase()))
