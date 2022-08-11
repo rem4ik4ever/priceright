@@ -2,6 +2,7 @@ import { NodeViewContent, NodeViewRendererProps, NodeViewWrapper } from "@tiptap
 import { useCallback } from "react"
 import clx from 'classnames'
 import styles from './section.module.css'
+import {MdClose, MdDragIndicator} from 'react-icons/md'
 
 export const Section = (props: NodeViewRendererProps) => {
   const {editor, node, getPos} = props
@@ -17,12 +18,27 @@ export const Section = (props: NodeViewRendererProps) => {
     }
   }, [getPos, node, editor])
 
+  const destroy = () => {
+    if(typeof getPos === 'function') {
+      const pos = getPos()
+      const end = pos + node.nodeSize
+      editor.commands.deleteRange({from: pos, to: end})
+    } 
+  }
+
   return (
     <NodeViewWrapper 
       className={clx(styles.root)}
       >
-
-      <div className={styles.topControls}>
+      <div className={styles.topControls}
+        draggable="true"
+      >
+        <div
+          className={styles.dragHandle}
+          contentEditable={false}
+          draggable="true"
+          data-drag-handle
+        />
         <button 
           className={clx(styles.insertSectionButton)}
           type="button" 
@@ -30,8 +46,9 @@ export const Section = (props: NodeViewRendererProps) => {
           >
             + insert section 
         </button>
+        <button type="button" onClick={destroy}><MdClose /></button>
       </div>
-      <span contentEditable="false">This is section</span>
+      <span>This is section</span>
       <NodeViewContent />
       <div className={styles.bottomControls}>
         <button 

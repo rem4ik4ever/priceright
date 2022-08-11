@@ -42,6 +42,7 @@
     "react-color": "^2.19.3",
     "react-dom": "18.2.0",
     "react-hotkeys-hook": "^3.4.6",
+    "react-icons": "^4.4.0",
     "react-merge-refs": "^2.0.1",
     "react-query": "^3.39.1",
     "superjson": "^1.9.1",

@@ -22,7 +22,7 @@ import { SectionNode } from "./nodes/section"
 
 
 export const extensions = [
-  StarterKit.configure({paragraph: false, heading: false, document: false}),
+  StarterKit.configure({paragraph: false, heading: false, document: false, blockquote: false}),
   Document.extend({
     content: 'section+'
   }),
@@ -33,14 +33,14 @@ export const extensions = [
   }),
   //DragHandle,
   Paragraph.extend({
-    draggable: false
+    //draggable: false
   }).configure({
     HTMLAttributes: {
       class: styles.paragraph
     } 
   }),
   Heading.extend({
-    draggable: true
+    //draggable: true
   }),
   Image,
   Typography,
@@ -76,7 +76,4 @@ export const extensions = [
     className: styles.hasFocus,
     mode: "deepest" 
   })
-  //Dropcursor.configure({
-  //  color: 'red'
-  //})
 ]

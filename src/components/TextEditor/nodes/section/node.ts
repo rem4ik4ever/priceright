@@ -25,6 +25,12 @@ declare module '@tiptap/core' {
 export const SectionNode = Node.create<SectionOptions>({
   name: 'section',
 
+  draggable: true,
+
+  group: "block",
+
+  content: "block*",
+
   addOptions() {
     return {
       id: v4(),
@@ -33,11 +39,9 @@ export const SectionNode = Node.create<SectionOptions>({
     }
   },
 
-  group: 'block',
-
-  content() {
-    return `paragraph block*`
-  },
+  //content() {
+  //  return `paragraph block*`
+  //},
 
   parseHTML() {
     return [
