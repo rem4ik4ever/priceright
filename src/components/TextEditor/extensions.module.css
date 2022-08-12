@@ -1,0 +1,9 @@
+.paragraph {
+  @apply my-1;
+}
+
+.hasFocus {
+  border-radius: 2px;
+  box-shadow: 0 0 1px;
+  @apply shadow-blue-400;
+}

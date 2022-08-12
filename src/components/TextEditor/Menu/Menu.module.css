@@ -8,3 +8,7 @@
     @apply bg-accent-2;
   } 
 }
+
+.active {
+  @apply bg-accent-3;
+}

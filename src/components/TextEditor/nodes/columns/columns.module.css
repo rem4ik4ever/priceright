@@ -1,0 +1,20 @@
+
+.root > div{
+  @apply my-2 flex sm:flex-row flex-col items-stretch;
+}
+
+.column {
+  @apply w-full p-3;
+}
+
+.center {
+  @apply justify-center;
+}
+
+.left {
+  @apply justify-start;
+}
+
+.right {
+  @apply justify-end;
+}

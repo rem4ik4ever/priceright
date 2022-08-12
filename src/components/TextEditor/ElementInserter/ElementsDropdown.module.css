@@ -1,5 +1,5 @@
 .root {
-  @apply bg-accent-0 min-w-[200px] max-w-[300px] max-h-[230px] overflow-auto;
+  @apply bg-accent-0 min-w-[200px] max-w-[300px] max-h-[230px] overflow-auto z-[10000] shadow-sm;
 }
 
 .itemsContainer{
@@ -8,4 +8,8 @@
 
 .item {
   @apply px-2 py-3 hover:bg-accent-2 text-left border-b last:border-none;
+}
+
+.isSelected {
+  @apply bg-accent-2;
 }

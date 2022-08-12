@@ -1,0 +1,11 @@
+.root {
+  @apply flex flex-1;
+}
+
+.wrapper {
+  @apply w-full;
+}
+
+.content {
+  @apply p-3 w-full;
+}

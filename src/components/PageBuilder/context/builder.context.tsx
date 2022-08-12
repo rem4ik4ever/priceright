@@ -4,6 +4,7 @@ import { getActions, BuilderActions } from './actions';
 import { Action, reducer } from './reducer';
 import { v4 } from 'uuid'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { string } from 'zod';
 
 function createCtx() {
   const ctx = createContext(undefined);
@@ -22,16 +23,14 @@ export const usePageBuilder =
 
 
 export interface BuildHistory {
-  stack: Array<Omit<BuilderState, 'preview' | 'history'>>,
+  stack: Array<Omit<BuilderState, 'preview' | 'history' | 'lastEditorId'>>,
   cursor: number
 }
 
 export interface BuilderState {
-  editorIds: string[],
-  editorsMap: { [id: string]: PageBlock },
+  id: string; 
+  content: string;
   preview: boolean,
-  focusedId: string | undefined
-  history: BuildHistory
 }
 export interface BuilderContextValue {
   state: BuilderState;
@@ -45,15 +44,15 @@ export interface BuilderCommands {
   }
 }
 
+export interface Page {
+  id: string;
+  content: string;
+}
+
 const _initialState: BuilderState = {
-  editorIds: [],
-  editorsMap: {},
+  id: v4(),
+  content: '',
   preview: false,
-  focusedId: undefined,
-  history: {
-    stack: [],
-    cursor: -1,
-  },
 }
 
 const debugReducer = (reducer: any) => (state: BuilderState, action: Action): BuilderState => {
@@ -62,25 +61,18 @@ const debugReducer = (reducer: any) => (state: BuilderState, action: Action): Bu
   return next;
 }
 
-const initialState = (template?: string[]): BuilderState => {
+const initialState = (page?: Page): BuilderState => {
   const state = { ..._initialState }
-  if (template) {
-    template.forEach(blockContent => {
-      const id = v4()
-      state.editorIds.push(id)
-      state.editorsMap[id] = {
-        id,
-        editor: undefined,
-        content: blockContent
-      } as any
-    })
+  if (page) {
+    state.content = page.content;
+    state.id = page.id
   }
   return state;
 }
 
-export const useBuilder = (template?: string[]) => {
+export const useBuilder = (page?: Page) => {
   const [state, dispatch] = useReducer(debugReducer(reducer), {
-    ...initialState(template),
+    ...initialState(page),
   });
   const actions = getActions(dispatch);
 
@@ -92,14 +84,14 @@ export const useBuilder = (template?: string[]) => {
 
 interface IPageBuilderContextProvider {
   children: React.ReactNode;
-  template?: string[]
+  page?: Page
 }
 
 export const PageBuilderContextProvider = ({
   children,
-  template
+  page
 }: IPageBuilderContextProvider): JSX.Element => {
-  const contextValue = useBuilder(template);
+  const contextValue = useBuilder(page);
   const Provider = _BuilderContextProvider as React.FC<{ value: BuilderContextValue, children: React.ReactNode }>
 //  useHotkeys('cmd + z', () => contextValue.undo())
 // useHotkeys('cmd + shift + z', () => contextValue.redo())
