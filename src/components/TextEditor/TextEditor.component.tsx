@@ -2,15 +2,15 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import editorStyles from './TextEditor.module.css'
 import { Menu } from './Menu'
 import { useEffect } from 'react'
-import {extensions} from './extensions'
+import { extensions } from './extensions'
 
 interface Props {
   content: string | undefined;
   preview: boolean
 }
 export const TextEditor = ({
-  content, 
-  preview 
+  content,
+  preview
 }: Props) => {
   const editor = useEditor({
     extensions,
@@ -30,7 +30,7 @@ export const TextEditor = ({
     if (!editor) {
       return undefined
     }
-    console.log({preview})
+    console.log({ preview })
     editor.setEditable(!preview)
   }, [editor, preview])
 

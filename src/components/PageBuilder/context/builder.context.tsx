@@ -28,7 +28,7 @@ export interface BuildHistory {
 }
 
 export interface BuilderState {
-  id: string; 
+  id: string;
   content: string;
   preview: boolean,
 }
@@ -93,8 +93,8 @@ export const PageBuilderContextProvider = ({
 }: IPageBuilderContextProvider): JSX.Element => {
   const contextValue = useBuilder(page);
   const Provider = _BuilderContextProvider as React.FC<{ value: BuilderContextValue, children: React.ReactNode }>
-//  useHotkeys('cmd + z', () => contextValue.undo())
-// useHotkeys('cmd + shift + z', () => contextValue.redo())
+  //  useHotkeys('cmd + z', () => contextValue.undo())
+  // useHotkeys('cmd + shift + z', () => contextValue.redo())
   return (
     <Provider value={contextValue}>
       {children}
