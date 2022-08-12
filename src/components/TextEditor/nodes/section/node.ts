@@ -11,7 +11,7 @@ export interface SectionOptions {
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     sections: {
-      insertSection: (insertAt: number) => ReturnType,
+      insertSection: (getPos: boolean | (() => number), nodeSize: number) => ReturnType,
     }
   }
 }
@@ -69,15 +69,17 @@ export const SectionNode = Node.create<SectionOptions>({
 
   addCommands() {
     return {
-      insertSection: (insertAt) => (props) => {
-        console.log({insertAt, editor: props.editor})
-        this.editor.commands.insertContent([
-          {
+      insertSection: (getPos, nodeSize) => (props) => {
+        if(typeof getPos === 'function') {
+          const insertAt = getPos() + nodeSize
+          props.editor.chain().insertContentAt(insertAt, [{
             type: 'section',
             content: [{type: 'paragraph'}]
-          }
-        ])
-        return true;
+          }])
+          .run();
+          return true;
+        }
+        return false;
       }
     }
   }

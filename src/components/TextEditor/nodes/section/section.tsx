@@ -5,18 +5,18 @@ import styles from './section.module.css'
 import {MdClose, MdDragIndicator} from 'react-icons/md'
 
 export const Section = (props: NodeViewRendererProps) => {
-  const {editor, node, getPos} = props
-  const handleAddSection = useCallback(() => {
+  const {editor, node, getPos } = props
+
+  const handleAddSection = (top: boolean) => () => {
     if(typeof getPos === 'function') {
-      const insertAt = getPos() + node.nodeSize
-      console.log({insertAt})
-      editor.chain().focus('end').insertContentAt(insertAt, [{
+      const insertAt = getPos() + (top ? 0 : node.nodeSize)
+      editor.chain().insertContentAt(insertAt, [{
         type: 'section',
         content: [{type: 'paragraph'}]
       }])
       .run();
     }
-  }, [getPos, node, editor])
+  }
 
   const destroy = () => {
     if(typeof getPos === 'function') {
@@ -42,7 +42,7 @@ export const Section = (props: NodeViewRendererProps) => {
         <button 
           className={clx(styles.insertSectionButton)}
           type="button" 
-          onClick={handleAddSection}
+          onClick={handleAddSection(true)}
           >
             + insert section 
         </button>
@@ -54,7 +54,7 @@ export const Section = (props: NodeViewRendererProps) => {
         <button 
           className={clx(styles.insertSectionButton)}
           type="button" 
-          onClick={handleAddSection}
+          onClick={handleAddSection(false)}
           >
             + insert section 
         </button>
