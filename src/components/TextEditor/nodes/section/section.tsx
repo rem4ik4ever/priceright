@@ -1,11 +1,21 @@
 import { NodeViewContent, NodeViewRendererProps, NodeViewWrapper } from "@tiptap/react"
-import { useCallback } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import clx from 'classnames'
 import styles from './section.module.css'
 import { MdClose, MdDragIndicator } from 'react-icons/md'
+import { useBuilder } from "@components/PageBuilder/context"
 
 export const Section = (props: NodeViewRendererProps) => {
   const { editor, node, getPos } = props
+
+  const hasAnchor = () => {
+    if (typeof getPos !== 'function') return false;
+
+    const anchor = editor.state.selection.anchor
+    const pos = getPos();
+    const result = anchor >= pos && anchor <= (pos + node.nodeSize) && editor.isFocused
+    return result;
+  }
 
   const handleAddSection = (top: boolean) => () => {
     if (typeof getPos === 'function') {
@@ -28,17 +38,19 @@ export const Section = (props: NodeViewRendererProps) => {
 
   return (
     <NodeViewWrapper
-      className={clx(styles.root)}
+      className={clx(styles.root, hasAnchor() && styles.focused)}
     >
       <div className={styles.topControls}
         draggable="true"
       >
         <div
-          className={styles.dragHandle}
+          className={clx(styles.dragHandle, styles.controlButton)}
           contentEditable={false}
           draggable="true"
           data-drag-handle
-        />
+        >
+          <MdDragIndicator className="w-4 h-4" />
+        </div>
         <button
           className={clx(styles.insertSectionButton)}
           type="button"
@@ -46,9 +58,12 @@ export const Section = (props: NodeViewRendererProps) => {
         >
           + insert section
         </button>
-        <button type="button" onClick={destroy}><MdClose /></button>
+        <button
+          type="button"
+          onClick={destroy}
+          className={clx(styles.closeIcon, styles.controlButton)}
+        ><MdClose className="w-4 h-4" /></button>
       </div>
-      <span>This is section</span>
       <NodeViewContent />
       <div className={styles.bottomControls}>
         <button

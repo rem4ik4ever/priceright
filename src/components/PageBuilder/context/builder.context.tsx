@@ -27,9 +27,17 @@ export interface BuildHistory {
   cursor: number
 }
 
+export interface NodeStyles {
+  margin: string;
+  padding: string;
+  backgroundColor: string;
+  width: string;
+}
 export interface BuilderState {
   id: string;
   content: string;
+  nodeId: string | null;
+  nodeStyles: NodeStyles | null // should be styles interface 
   preview: boolean,
 }
 export interface BuilderContextValue {
@@ -52,6 +60,8 @@ export interface Page {
 const _initialState: BuilderState = {
   id: v4(),
   content: '',
+  nodeId: null,
+  nodeStyles: null,
   preview: false,
 }
 
