@@ -33,14 +33,14 @@ export const SectionNode = Node.create<SectionOptions, { isFocused: boolean }>({
 
   addOptions() {
     return {
-      id: v4(),
+      id: 'id',
       itemTypeName: 'column',
       HTMLAttributes: {},
       styles: {
         padding: '',
         margin: '',
         backgroundColor: 'none',
-        width: 'auto'
+        width: '100%'
       }
     }
   },
@@ -65,21 +65,21 @@ export const SectionNode = Node.create<SectionOptions, { isFocused: boolean }>({
 
   addAttributes() {
     return {
-      id: {
-        default: this.options.id
-      },
-      styles: {
-        default: this.options.styles
+      width: {
+        default: this.options.styles?.width
       }
+      //styles: {
+      //  default: this.options.styles
+      //},
     }
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['page-section', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, { 'data-id': this.options.id }), 0]
+    return ['page-section', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0]
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(Section)
+    return ReactNodeViewRenderer(Section, { as: 'section' })
   },
 
   addCommands() {
@@ -90,5 +90,4 @@ export const SectionNode = Node.create<SectionOptions, { isFocused: boolean }>({
       }
     }
   }
-
 })

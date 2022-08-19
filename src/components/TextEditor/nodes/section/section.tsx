@@ -1,21 +1,29 @@
-import { NodeViewContent, NodeViewRendererProps, NodeViewWrapper } from "@tiptap/react"
-import { useCallback, useEffect, useMemo } from "react"
+import { NodeViewContent, NodeViewProps, NodeViewRendererProps, NodeViewWrapper } from "@tiptap/react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import clx from 'classnames'
 import styles from './section.module.css'
 import { MdClose, MdDragIndicator } from 'react-icons/md'
 import { useBuilder } from "@components/PageBuilder/context"
+import { useResize } from 'src/hooks/useResize'
 
-export const Section = (props: NodeViewRendererProps) => {
+export const Section = (props: NodeViewProps) => {
   const { editor, node, getPos } = props
+  const [isFocused, setFocused] = useState(false)
+  const [pos, setPos] = useState<number>(-1)
+  const { anchor } = editor.state.selection
+  const ref = useRef<HTMLDivElement | null>(null)
+  useResize(ref, (width) => props.updateAttributes({ width }))
 
-  const hasAnchor = () => {
-    if (typeof getPos !== 'function') return false;
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setFocused(editor.isFocused)
+      setPos(getPos())
+    }, 250)
+    return () => clearInterval(timer)
+  }, [])
 
-    const anchor = editor.state.selection.anchor
-    const pos = getPos();
-    const result = anchor >= pos && anchor <= (pos + node.nodeSize) && editor.isFocused
-    return result;
-  }
+  const hasAnchor = (anchor >= pos && anchor <= (pos + node.nodeSize) && isFocused
+  )
 
   const handleAddSection = (top: boolean) => () => {
     if (typeof getPos === 'function') {
@@ -37,42 +45,48 @@ export const Section = (props: NodeViewRendererProps) => {
   }
 
   return (
-    <NodeViewWrapper
-      className={clx(styles.root, hasAnchor() && styles.focused)}
-    >
-      <div className={styles.topControls}
-        draggable="true"
+    <NodeViewWrapper className={styles.root}>
+      <div
+        ref={(r) => ref.current = r}
+        className={clx('resizable-section', styles.container, hasAnchor && styles.focused)}
+        style={{
+          width: node.attrs.width
+        }}
       >
-        <div
-          className={clx(styles.dragHandle, styles.controlButton)}
-          contentEditable={false}
-          draggable="true"
-          data-drag-handle
+
+        <div className={styles.topControls}
         >
-          <MdDragIndicator className="w-4 h-4" />
+          <div
+            className={clx(styles.dragHandle, styles.controlButton)}
+            contentEditable={false}
+            draggable="true"
+            data-drag-handle
+          >
+            <MdDragIndicator className="w-4 h-4" />
+          </div>
+          <button
+            className={clx(styles.insertSectionButton)}
+            type="button"
+            onClick={handleAddSection(true)}
+          >
+            + insert section
+          </button>
+          <button
+            type="button"
+            onClick={destroy}
+            className={clx(styles.closeIcon, styles.controlButton)}
+          ><MdClose className="w-4 h-4" /></button>
         </div>
-        <button
-          className={clx(styles.insertSectionButton)}
-          type="button"
-          onClick={handleAddSection(true)}
-        >
-          + insert section
-        </button>
-        <button
-          type="button"
-          onClick={destroy}
-          className={clx(styles.closeIcon, styles.controlButton)}
-        ><MdClose className="w-4 h-4" /></button>
-      </div>
-      <NodeViewContent />
-      <div className={styles.bottomControls}>
-        <button
-          className={clx(styles.insertSectionButton)}
-          type="button"
-          onClick={handleAddSection(false)}
-        >
-          + insert section
-        </button>
+        <NodeViewContent />
+        <div className={styles.bottomControls}>
+          <button
+            className={clx(styles.insertSectionButton)}
+            type="button"
+            onClick={handleAddSection(false)}
+          >
+            + insert section
+          </button>
+        </div>
       </div>
     </NodeViewWrapper>
   )

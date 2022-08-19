@@ -80,5 +80,4 @@ export const extensions = [
     className: styles.hasFocus,
     mode: "deepest"
   }),
-  UUID
 ]

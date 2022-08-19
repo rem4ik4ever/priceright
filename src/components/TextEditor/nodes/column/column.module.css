@@ -7,5 +7,5 @@
 }
 
 .content {
-  @apply p-3 w-full;
+  @apply w-full;
 }

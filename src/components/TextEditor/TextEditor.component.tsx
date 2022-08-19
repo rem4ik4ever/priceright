@@ -38,9 +38,6 @@ export const TextEditor = ({
     <>
       <Menu editor={editor} />
       <EditorContent className={editorStyles.root} editor={editor} />
-      <div className="">
-        {editor?.getHTML()}
-      </div>
     </>
   )
 }
