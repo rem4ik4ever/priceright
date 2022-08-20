@@ -3,7 +3,7 @@
 }
 
 .container { 
-  @apply py-3 relative;
+  @apply p-2 relative;
 
   &:hover:not(.focused) {
     /*box-shadow: rgb(33 33 33 / 80%) 0px 0px 1px 2px, rgb(33 33 33 / 50%) 0px 0px 0px 5000px;*/
@@ -19,8 +19,7 @@
 }
 
 .bottomControls{
-  @apply absolute flex justify-center -mb-4 opacity-0 left-0 w-full;
-  width: inherit;
+  @apply absolute flex justify-center -mb-4 opacity-0 left-0 w-full transition-opacity;
 
   &:hover {
     @apply opacity-100;
@@ -28,7 +27,7 @@
 }
 
 .topControls{
-  @apply absolute flex justify-between -mt-6 pb-4 opacity-0 left-0 w-full;
+  @apply absolute flex justify-between -mt-6 pb-4 opacity-0 left-0 w-full transition-opacity;
 
   &:hover {
     @apply opacity-100;
@@ -64,4 +63,8 @@
 
 .closeIcon {
   @apply -mr-2;
+}
+
+.noSelect {
+  @apply select-none;
 }

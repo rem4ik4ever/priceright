@@ -1,7 +1,13 @@
+import { Editor } from "@tiptap/react"
 import interact from "interactjs"
 import { MutableRefObject, useEffect, useState } from "react"
 
-export const useResize = (target: MutableRefObject<HTMLDivElement | null>, onUpdate: (val: number) => void) => {
+interface Props {
+  target: MutableRefObject<HTMLDivElement | null>,
+  editor: Editor,
+  onUpdate: (val: number) => void
+}
+export const useResize = ({ target, editor, onUpdate }: Props) => {
   const [] = useState(false)
   useEffect(() => {
     if (!target?.current) return;
@@ -9,12 +15,24 @@ export const useResize = (target: MutableRefObject<HTMLDivElement | null>, onUpd
       .resizable({
         edges: { top: false, left: true, bottom: false, right: true },
         axis: 'x',
+        onstart: (event) => {
+          //console.log("start", event)
+          editor.setEditable(false)
+        },
+        onmove: (event) => {
+          //console.log("move", event)
+        },
+        onend: (event) => {
+          //console.log("end", event)
+          editor.setEditable(true)
+        },
         listeners: {
           move: function (event) {
-            const w = event.rect.width
+            const diff = event.clientX0 - event.client.x;
+            const w = event.rect.width - diff
             const unit = 'px'
             Object.assign(event.target.style, {
-              width: `${w}${unit}`,
+              width: `${w}${unit}`
             })
             onUpdate(w)
           }
@@ -31,6 +49,7 @@ export const useResize = (target: MutableRefObject<HTMLDivElement | null>, onUpd
           })
         ],
       })
+      .preventDefault()
     return () => { }
   }, [target, onUpdate])
 }

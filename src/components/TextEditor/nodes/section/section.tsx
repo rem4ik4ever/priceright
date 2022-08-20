@@ -12,7 +12,7 @@ export const Section = (props: NodeViewProps) => {
   const [pos, setPos] = useState<number>(-1)
   const { anchor } = editor.state.selection
   const ref = useRef<HTMLDivElement | null>(null)
-  useResize(ref, (width) => props.updateAttributes({ width }))
+  useResize({ target: ref, editor: editor as any, onUpdate: (width) => props.updateAttributes({ width }) })
 
   useEffect(() => {
     const timer = setInterval(() => {

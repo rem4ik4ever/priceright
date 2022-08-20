@@ -21,6 +21,7 @@ import Focus from '@tiptap/extension-focus'
 import { SectionNode } from "./nodes/section"
 import { UUID } from "./uuid-extension"
 import { SpacerNode } from "./nodes/spacer"
+import { FontSize, LineHeight } from "./text-extensions"
 
 
 export const extensions = [
@@ -80,4 +81,6 @@ export const extensions = [
     className: styles.hasFocus,
     mode: "deepest"
   }),
+  FontSize,
+  LineHeight
 ]
