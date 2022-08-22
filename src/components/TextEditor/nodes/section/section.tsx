@@ -1,11 +1,29 @@
-import { NodeViewContent, NodeViewRendererProps, NodeViewWrapper } from "@tiptap/react"
-import { useCallback } from "react"
+import { NodeViewContent, NodeViewProps, NodeViewRendererProps, NodeViewWrapper } from "@tiptap/react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import clx from 'classnames'
 import styles from './section.module.css'
 import { MdClose, MdDragIndicator } from 'react-icons/md'
+import { useBuilder } from "@components/PageBuilder/context"
+import { useResize } from 'src/hooks/useResize'
 
-export const Section = (props: NodeViewRendererProps) => {
+export const Section = (props: NodeViewProps) => {
   const { editor, node, getPos } = props
+  const [isFocused, setFocused] = useState(false)
+  const [pos, setPos] = useState<number>(-1)
+  const { anchor } = editor.state.selection
+  const ref = useRef<HTMLDivElement | null>(null)
+  useResize({ target: ref, editor: editor as any, onUpdate: (width) => props.updateAttributes({ width }) })
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setFocused(editor.isFocused)
+      setPos(getPos())
+    }, 250)
+    return () => clearInterval(timer)
+  }, [getPos, editor])
+
+  const hasAnchor = (anchor >= pos && anchor <= (pos + node.nodeSize) && isFocused
+  )
 
   const handleAddSection = (top: boolean) => () => {
     if (typeof getPos === 'function') {
@@ -27,37 +45,48 @@ export const Section = (props: NodeViewRendererProps) => {
   }
 
   return (
-    <NodeViewWrapper
-      className={clx(styles.root)}
-    >
-      <div className={styles.topControls}
-        draggable="true"
+    <NodeViewWrapper className={styles.root}>
+      <div
+        ref={(r) => ref.current = r}
+        className={clx('resizable-section', styles.container, hasAnchor && styles.focused)}
+        style={{
+          width: node.attrs.width
+        }}
       >
-        <div
-          className={styles.dragHandle}
-          contentEditable={false}
-          draggable="true"
-          data-drag-handle
-        />
-        <button
-          className={clx(styles.insertSectionButton)}
-          type="button"
-          onClick={handleAddSection(true)}
+
+        <div className={styles.topControls}
         >
-          + insert section
-        </button>
-        <button type="button" onClick={destroy}><MdClose /></button>
-      </div>
-      <span>This is section</span>
-      <NodeViewContent />
-      <div className={styles.bottomControls}>
-        <button
-          className={clx(styles.insertSectionButton)}
-          type="button"
-          onClick={handleAddSection(false)}
-        >
-          + insert section
-        </button>
+          <div
+            className={clx(styles.dragHandle, styles.controlButton)}
+            contentEditable={false}
+            draggable="true"
+            data-drag-handle
+          >
+            <MdDragIndicator className="w-4 h-4" />
+          </div>
+          <button
+            className={clx(styles.insertSectionButton)}
+            type="button"
+            onClick={handleAddSection(true)}
+          >
+            + insert section
+          </button>
+          <button
+            type="button"
+            onClick={destroy}
+            className={clx(styles.closeIcon, styles.controlButton)}
+          ><MdClose className="w-4 h-4" /></button>
+        </div>
+        <NodeViewContent />
+        <div className={styles.bottomControls}>
+          <button
+            className={clx(styles.insertSectionButton)}
+            type="button"
+            onClick={handleAddSection(false)}
+          >
+            + insert section
+          </button>
+        </div>
       </div>
     </NodeViewWrapper>
   )

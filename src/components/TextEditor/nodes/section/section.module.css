@@ -1,12 +1,13 @@
-.root { 
-  @apply px-2 transition-all py-3;
+.root {
+  @apply flex justify-center max-w-full;
+}
 
-  & > .bottomControls .topControls {
-    @apply -z-50;
-  }
+.container { 
+  @apply p-2 relative;
 
-  &:hover {
+  &:hover:not(.focused) {
     /*box-shadow: rgb(33 33 33 / 80%) 0px 0px 1px 2px, rgb(33 33 33 / 50%) 0px 0px 0px 5000px;*/
+    @apply outline-dotted outline-blue-200 outline-1;
     & > .bottomControls .topControls {
       @apply z-0;
     }
@@ -14,11 +15,11 @@
 }
 
 .focused {
-  @apply outline-dotted outline-blue-400 outline-1;
+  @apply outline outline-blue-400 outline-1;
 }
 
 .bottomControls{
-  @apply absolute w-full flex justify-center -mt-4 pt-4 opacity-0;
+  @apply absolute flex justify-center -mb-4 opacity-0 left-0 w-full transition-opacity;
 
   &:hover {
     @apply opacity-100;
@@ -26,7 +27,7 @@
 }
 
 .topControls{
-  @apply absolute w-full flex justify-between -mt-6 pb-4 opacity-0;
+  @apply absolute flex justify-between -mt-6 pb-4 opacity-0 left-0 w-full transition-opacity;
 
   &:hover {
     @apply opacity-100;
@@ -46,16 +47,24 @@
   }
 }
 
+.controlButton {
+  @apply w-5 h-5 rounded-md flex justify-center items-center;
+  &:hover {
+    @apply bg-accent-2;
+  }
+}
+
 .dragHandle {
+  @apply -ml-2;
   flex: 0 0 auto;
   position: relative;
-  width: 1rem;
-  height: 1rem;
-  top: 0.3rem;
-  margin-right: 0.5rem;
   cursor: grab;
-  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 16"><path fill-opacity="0.2" d="M4 14c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zM2 6C.9 6 0 6.9 0 8s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6C.9 0 0 .9 0 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" /></svg>');
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
+}
+
+.closeIcon {
+  @apply -mr-2;
+}
+
+.noSelect {
+  @apply select-none;
 }

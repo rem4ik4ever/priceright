@@ -28,30 +28,30 @@ export const Command = Node.create<CommandOptions>({
         pluginKey: CommandPluginKey,
         command: (commandProps) => {
           const { editor, range, props } = commandProps
-          console.log({commandProps})
+          console.log({ commandProps })
           // increase range.to by one when the next node is of type "text"
           // and starts with a space character
           const nodeAfter = editor.view.state.selection.$to.nodeAfter
           const overrideSpace = nodeAfter?.text?.startsWith(' ')
 
-          console.log({props})
+          console.log({ props })
           const command = props.id
           if (overrideSpace) {
             range.to += 1
           }
 
           const content = [
-              {
-                type: 'text',
-                text: ' ',
-              },
+            {
+              type: 'text',
+              text: ' ',
+            },
           ]
           let execution = editor
             .chain()
             .deleteRange(range)
 
-          switch(command.type) {
-            case "heading": 
+          switch (command.type) {
+            case "heading":
               execution.focus('end').insertContent([
                 {
                   type: 'heading',
@@ -60,17 +60,17 @@ export const Command = Node.create<CommandOptions>({
               ]).run()
               break;
             case "bulletList":
-                execution.focus('end').toggleBulletList().run();
-                break;
+              execution.focus('end').toggleBulletList().run();
+              break;
             case "orderedList":
-                execution.focus('end').toggleOrderedList().run();
-                break;
-            case "paragraph": 
+              execution.focus('end').toggleOrderedList().run();
+              break;
+            case "paragraph":
               execution.focus('end').insertContent({
                 type: 'paragraph',
               }).run();
               break;
-            case "button": 
+            case "button":
               execution.focus('end').insertContent({
                 type: 'button',
                 attrs: {
@@ -79,16 +79,21 @@ export const Command = Node.create<CommandOptions>({
                 }
               }).run()
               break;
-            case 'columns': 
+            case 'columns':
               execution.focus('end').insertContent([{
                 type: 'columns',
                 content: [
-                  {type: 'column', content: [{type: 'paragraph'}]},
-                  {type: 'column', content: [{type: 'paragraph'}]}
+                  { type: 'column', content: [{ type: 'paragraph' }] },
+                  { type: 'column', content: [{ type: 'paragraph' }] }
                 ]
               }]).run()
               break;
-            default: 
+            case 'spacer':
+              execution.focus('end').insertContent([{
+                type: 'spacer'
+              }]).run()
+              break;
+            default:
               console.warn('No command found')
               break;
           }

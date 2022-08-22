@@ -23,7 +23,7 @@ export const Column = Node.create<TaskItemOptions>({
   },
 
   content() {
-    return this.options.nested ? 'paragraph block*' : 'paragraph+'
+    return 'block+'
   },
 
   defining: true,
@@ -61,6 +61,6 @@ export const Column = Node.create<TaskItemOptions>({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(Flex, {className: styles.root})
+    return ReactNodeViewRenderer(Flex, { className: styles.root })
   },
 })

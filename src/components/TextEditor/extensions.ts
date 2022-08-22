@@ -2,16 +2,16 @@ import Document from "@tiptap/extension-document"
 import Typography from "@tiptap/extension-typography"
 import StarterKit from "@tiptap/starter-kit"
 import Command from './commands-extension'
-import {suggestion} from './commands-extension'
-import {TextAlign} from '@tiptap/extension-text-align'
+import { suggestion } from './commands-extension'
+import { TextAlign } from '@tiptap/extension-text-align'
 import Button from './nodes/button/button'
-import {Placeholder} from '@tiptap/extension-placeholder'
+import { Placeholder } from '@tiptap/extension-placeholder'
 import Blockquote from '@tiptap/extension-blockquote'
 import Color from '@tiptap/extension-color'
 import TextStyle from '@tiptap/extension-text-style'
 import Dropcursor from '@tiptap/extension-dropcursor'
 import Image from '@tiptap/extension-image'
-import {Paragraph} from '@tiptap/extension-paragraph'
+import { Paragraph } from '@tiptap/extension-paragraph'
 import styles from './extensions.module.css'
 import { DragHandle } from "./drag-handle-extension"
 import Heading from '@tiptap/extension-heading'
@@ -19,10 +19,13 @@ import Columns from './nodes/columns'
 import Column from './nodes/column'
 import Focus from '@tiptap/extension-focus'
 import { SectionNode } from "./nodes/section"
+import { UUID } from "./uuid-extension"
+import { SpacerNode } from "./nodes/spacer"
+import { FontSize, LineHeight } from "./text-extensions"
 
 
 export const extensions = [
-  StarterKit.configure({paragraph: false, heading: false, document: false, blockquote: false}),
+  StarterKit.configure({ paragraph: false, heading: false, document: false, blockquote: false }),
   Document.extend({
     content: 'section+'
   }),
@@ -31,13 +34,14 @@ export const extensions = [
   Column.configure({
     nested: true
   }),
+  SpacerNode,
   //DragHandle,
   Paragraph.extend({
     //draggable: false
   }).configure({
     HTMLAttributes: {
       class: styles.paragraph
-    } 
+    }
   }),
   Heading.extend({
     //draggable: true
@@ -62,6 +66,7 @@ export const extensions = [
       }
       return 'Insert elements by typing "/"'
     },
+    emptyEditorClass: 'is-empty',
   }),
   Blockquote.configure({
     HTMLAttributes: {
@@ -74,6 +79,8 @@ export const extensions = [
   }),
   Focus.configure({
     className: styles.hasFocus,
-    mode: "deepest" 
-  })
+    mode: "deepest"
+  }),
+  FontSize,
+  LineHeight
 ]

@@ -8,9 +8,14 @@ export const Flex = (props: NodeViewRendererProps) => {
   const { anchor } = selection;
   const { columns, ...attrs } = node.attrs;
 
+  const isEmpty = node.content.size === 2
+  console.log({ isEmpty })
   return (
     <NodeViewWrapper className={clx(styles.wrapper, styles[attrs.textAlign])}>
-      <NodeViewContent className={styles.content} />
+      <NodeViewContent
+        className={clx(styles.content, isEmpty && 'is-empty')}
+        data-placeholder="Column"
+      />
     </NodeViewWrapper>
   )
 }

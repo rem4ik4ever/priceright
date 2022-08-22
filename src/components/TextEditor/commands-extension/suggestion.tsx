@@ -1,9 +1,9 @@
 import { ReactRenderer } from '@tiptap/react'
-import {SuggestionProps} from '@tiptap/suggestion'
+import { SuggestionProps } from '@tiptap/suggestion'
 import { CommandOptions } from './commands.js'
 import tippy from 'tippy.js'
 
-import {MentionList, MentionListProps, MentionListRef } from './MentionList'
+import { MentionList, MentionListProps, MentionListRef } from './MentionList'
 import { RefAttributes } from 'react'
 
 export const suggestion: CommandOptions['suggestion'] = {
@@ -49,6 +49,10 @@ export const suggestion: CommandOptions['suggestion'] = {
       {
         title: 'Columns',
         type: 'columns',
+      },
+      {
+        title: 'Spacer',
+        type: 'spacer',
       }
     ]
       .filter(item => item.title.toLowerCase().startsWith(query.toLowerCase()))
@@ -57,7 +61,7 @@ export const suggestion: CommandOptions['suggestion'] = {
 
   render: () => {
     let component: ReactRenderer<MentionListRef, MentionListProps & RefAttributes<MentionListRef>>;
-    let popup:any;
+    let popup: any;
 
     return {
       onStart: (props: SuggestionProps) => {

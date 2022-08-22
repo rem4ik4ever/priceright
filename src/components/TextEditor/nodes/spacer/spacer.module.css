@@ -1,0 +1,27 @@
+.root {
+  @apply flex items-end justify-center;
+
+  &:hover {
+   @apply outline outline-1 outline-blue-400;
+  }
+
+  &:not(:hover) .handlerContainer {
+    @apply hidden;
+  }
+
+  &:hover > .handlerContainer{
+    @apply visible;
+  }
+}
+
+.handlerContainer {
+  @apply -mb-2;
+}
+
+.active {
+   @apply outline outline-1 outline-blue-400;
+ }
+
+.handler {
+  @apply w-6 h-6 text-blue-400;
+}

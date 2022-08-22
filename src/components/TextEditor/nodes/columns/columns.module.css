@@ -1,10 +1,9 @@
-
 .root > div{
-  @apply my-2 flex sm:flex-row flex-col items-stretch;
+  @apply flex sm:flex-row flex-col items-stretch gap-2;
 }
 
 .column {
-  @apply w-full p-3;
+  @apply w-full;
 }
 
 .center {

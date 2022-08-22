@@ -3,6 +3,7 @@ import editorStyles from './TextEditor.module.css'
 import { Menu } from './Menu'
 import { useEffect } from 'react'
 import { extensions } from './extensions'
+import { OptionsDrawer } from './OptionsDrawer'
 
 interface Props {
   content: string | undefined;
@@ -30,7 +31,6 @@ export const TextEditor = ({
     if (!editor) {
       return undefined
     }
-    console.log({ preview })
     editor.setEditable(!preview)
   }, [editor, preview])
 
