@@ -16,14 +16,18 @@ export const useResize = ({ target, editor, onUpdate }: Props) => {
         edges: { top: false, left: true, bottom: false, right: true },
         axis: 'x',
         onstart: (event) => {
-          //console.log("start", event)
           editor.setEditable(false)
         },
-        onmove: (event) => {
-          //console.log("move", event)
-        },
         onend: (event) => {
-          //console.log("end", event)
+          const pw = event.target.parentElement.clientWidth
+          const tw = event.rect.width
+          const percentage = tw * 100 / pw
+          // Snap section to 100%
+          if (percentage > 95) {
+            Object.assign(event.target.style, {
+              width: `100%`
+            })
+          }
           editor.setEditable(true)
         },
         listeners: {

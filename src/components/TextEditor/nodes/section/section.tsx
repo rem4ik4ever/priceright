@@ -20,7 +20,7 @@ export const Section = (props: NodeViewProps) => {
       setPos(getPos())
     }, 250)
     return () => clearInterval(timer)
-  }, [])
+  }, [getPos, editor])
 
   const hasAnchor = (anchor >= pos && anchor <= (pos + node.nodeSize) && isFocused
   )
