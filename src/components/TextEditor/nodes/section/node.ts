@@ -51,10 +51,6 @@ export const SectionNode = Node.create<SectionOptions, { isFocused: boolean }>({
     }
   },
 
-  //content() {
-  //  return `paragraph block*`
-  //},
-
   parseHTML() {
     return [
       {
@@ -67,6 +63,9 @@ export const SectionNode = Node.create<SectionOptions, { isFocused: boolean }>({
     return {
       width: {
         default: this.options.styles?.width
+      },
+      backgroundColor: {
+        default: this.options.styles?.backgroundColor
       }
       //styles: {
       //  default: this.options.styles

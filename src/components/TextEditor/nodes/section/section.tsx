@@ -5,6 +5,7 @@ import styles from './section.module.css'
 import { MdClose, MdDragIndicator } from 'react-icons/md'
 import { useBuilder } from "@components/PageBuilder/context"
 import { useResize } from 'src/hooks/useResize'
+import ExamplePopover from "./popover"
 
 export const Section = (props: NodeViewProps) => {
   const { editor, node, getPos } = props
@@ -22,8 +23,8 @@ export const Section = (props: NodeViewProps) => {
     return () => clearInterval(timer)
   }, [getPos, editor])
 
-  const hasAnchor = (anchor >= pos && anchor <= (pos + node.nodeSize) && isFocused
-  )
+  const hasAnchor = useMemo(() => (anchor >= pos && anchor <= (pos + node.nodeSize) && isFocused
+  ), [pos, node, isFocused, anchor])
 
   const handleAddSection = (top: boolean) => () => {
     if (typeof getPos === 'function') {
@@ -50,7 +51,8 @@ export const Section = (props: NodeViewProps) => {
         ref={(r) => ref.current = r}
         className={clx('resizable-section', styles.container, hasAnchor && styles.focused)}
         style={{
-          width: node.attrs.width
+          width: node.attrs.width,
+          backgroundColor: node.attrs.backgroundColor
         }}
       >
 
@@ -71,6 +73,7 @@ export const Section = (props: NodeViewProps) => {
           >
             + insert section
           </button>
+          <ExamplePopover />
           <button
             type="button"
             onClick={destroy}

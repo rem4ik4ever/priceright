@@ -89,7 +89,7 @@ export const Command = Node.create<CommandOptions>({
               }]).run()
               break;
             case 'spacer':
-              execution.focus('end').insertContent([{
+              execution.focus().insertContent([{
                 type: 'spacer'
               }]).run()
               break;

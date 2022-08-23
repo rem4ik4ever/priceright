@@ -84,7 +84,7 @@ export const Menu = ({ editor }: Props) => {
                 <select
                   id="fontSize"
                   className="w-18 text-sm"
-                  value={parseFloat(editor.getAttributes('textStyle').fontSize)}
+                  value={parseFloat(editor.getAttributes('textStyle').fontSize) || 0.5}
                   onChange={(e) => {
                     e.preventDefault()
                     editor.chain().focus().setFontSize(+e.target.value).run()
@@ -110,7 +110,7 @@ export const Menu = ({ editor }: Props) => {
                 <select
                   id="lineHeight"
                   className="w-18 text-sm"
-                  value={parseFloat(editor.getAttributes('textStyle').lineHeight)}
+                  value={parseFloat(editor.getAttributes('textStyle').lineHeight) || 0.5}
                   onChange={(e) => {
                     e.preventDefault()
                     editor.chain().focus().setLineHeight(+e.target.value).run()
