@@ -13,11 +13,8 @@ export const useResize = ({ target, editor, onUpdate }: Props) => {
     if (!target?.current) return;
     interact(target.current)
       .resizable({
-        edges: { top: false, left: true, bottom: false, right: true },
+        edges: { top: false, left: false, bottom: false, right: true },
         axis: 'x',
-        onstart: (event) => {
-          editor.setEditable(false)
-        },
         onend: (event) => {
           const pw = event.target.parentElement.clientWidth
           const tw = event.rect.width

@@ -1,19 +1,37 @@
 import { NodeViewContent, NodeViewProps, NodeViewRendererProps, NodeViewWrapper } from "@tiptap/react"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import clx from 'classnames'
 import styles from './section.module.css'
-import { MdClose, MdDragIndicator } from 'react-icons/md'
-import { useBuilder } from "@components/PageBuilder/context"
+import { MdAdd, MdClose, MdDragIndicator } from 'react-icons/md'
 import { useResize } from 'src/hooks/useResize'
-import ExamplePopover from "./popover"
+import { SectionSettings } from "./Settings"
+import { autoUpdate, offset, shift, useFloating, useHover, useInteractions } from "@floating-ui/react-dom-interactions"
 
 export const Section = (props: NodeViewProps) => {
-  const { editor, node, getPos } = props
+  const { editor, node, getPos, updateAttributes } = props
   const [isFocused, setFocused] = useState(false)
   const [pos, setPos] = useState<number>(-1)
   const { anchor } = editor.state.selection
   const ref = useRef<HTMLDivElement | null>(null)
   useResize({ target: ref, editor: editor as any, onUpdate: (width) => props.updateAttributes({ width }) })
+  const { strategy, floating, reference, x, y, context } = useFloating({
+    placement: 'left',
+    strategy: 'absolute',
+    middleware: [offset(1), shift()],
+    whileElementsMounted: (reference, floating, update) =>
+      autoUpdate(reference, floating, update, {
+        animationFrame: true,
+      }),
+  })
+  const { getReferenceProps, getFloatingProps } = useInteractions([
+    useHover(context, {
+      enabled: true,
+      delay: {
+        open: 200,
+        close: 0
+      }
+    })
+  ])
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -23,8 +41,7 @@ export const Section = (props: NodeViewProps) => {
     return () => clearInterval(timer)
   }, [getPos, editor])
 
-  const hasAnchor = useMemo(() => (anchor >= pos && anchor <= (pos + node.nodeSize) && isFocused
-  ), [pos, node, isFocused, anchor])
+  const hasAnchor = anchor >= pos && anchor <= (pos + node.nodeSize) && isFocused
 
   const handleAddSection = (top: boolean) => () => {
     if (typeof getPos === 'function') {
@@ -46,49 +63,65 @@ export const Section = (props: NodeViewProps) => {
   }
 
   return (
-    <NodeViewWrapper className={styles.root}>
-      <div
-        ref={(r) => ref.current = r}
-        className={clx('resizable-section', styles.container, hasAnchor && styles.focused)}
-        style={{
-          width: node.attrs.width,
-          backgroundColor: node.attrs.backgroundColor
-        }}
-      >
+    <NodeViewWrapper className="container mx-auto">
 
-        <div className={styles.topControls}
+      <div className={styles.root} {...getReferenceProps({ ref: reference })}>
+        <div
+          ref={(r) => ref.current = r}
+          className={clx('resizable-section', styles.content, hasAnchor && styles.focused)}
+          style={{
+            width: node.attrs.width,
+            backgroundColor: node.attrs.backgroundColor
+          }}
         >
           <div
-            className={clx(styles.dragHandle, styles.controlButton)}
+            {...getFloatingProps({ ref: floating })}
+            className={clx(styles.dragHandle)}
+            style={{
+              position: strategy,
+              top: y ?? 0,
+              left: x ?? 0,
+            }}
             contentEditable={false}
             draggable="true"
             data-drag-handle
           >
-            <MdDragIndicator className="w-4 h-4" />
+            <MdDragIndicator className={styles.icon} />
           </div>
-          <button
-            className={clx(styles.insertSectionButton)}
-            type="button"
-            onClick={handleAddSection(true)}
+          <div className={clx(hasAnchor ? styles.topControls : 'hidden')}
           >
-            + insert section
-          </button>
-          <ExamplePopover />
-          <button
-            type="button"
-            onClick={destroy}
-            className={clx(styles.closeIcon, styles.controlButton)}
-          ><MdClose className="w-4 h-4" /></button>
-        </div>
-        <NodeViewContent />
-        <div className={styles.bottomControls}>
-          <button
-            className={clx(styles.insertSectionButton)}
-            type="button"
-            onClick={handleAddSection(false)}
-          >
-            + insert section
-          </button>
+            <div className={styles.controls}>
+              <button
+                className={clx(styles.settingsBtn)}
+                type="button"
+                onClick={handleAddSection(true)}
+              >
+                <MdAdd className={styles.icon} />
+              </button>
+              <SectionSettings
+                editor={editor}
+                node={node}
+                updateAttributes={updateAttributes}
+              />
+              <button
+                type="button"
+                onClick={destroy}
+                className={clx(styles.settingsBtn)}
+              ><MdClose className={styles.icon} /></button>
+            </div>
+          </div>
+          <NodeViewContent />
+          <div className={clx(styles.bottomControls, hasAnchor && 'z-10')}>
+            <div className={styles.controls}>
+              <button
+                className={clx(styles.settingsBtn)}
+                type="button"
+                onClick={handleAddSection(false)}
+              >
+                <MdAdd className={styles.icon} />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </NodeViewWrapper>

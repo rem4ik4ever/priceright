@@ -13,8 +13,8 @@ export const PageBuilder = () => {
   return (
     <div>
       <div className="flex h-12 shadow-md border-b">header</div>
-      <div className="flex justify-between bg-accent-1">
-        <div className="w-[225px] border-r h-[100vh] bg-primary">
+      <div className="flex justify-between bg-primary">
+        {/*<div className="w-[225px] border-r h-[100vh] bg-primary">
           Some config area
           <div>
             Editing node: {nodeId}
@@ -22,13 +22,11 @@ export const PageBuilder = () => {
           <pre>
             {JSON.stringify(nodeStyles)}
           </pre>
-        </div>
-        <div className="w-full bg-primary">
-          <TextEditor
-            content={content}
-            preview={preview}
-          />
-        </div>
+        </div>*/}
+        <TextEditor
+          content={content}
+          preview={preview}
+        />
       </div>
     </div>
   )
