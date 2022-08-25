@@ -28,8 +28,8 @@ export interface BuildHistory {
 }
 
 export interface NodeStyles {
-  margin: string;
-  padding: string;
+  margin: [number, number, number, number];
+  padding: [number, number, number, number];
   backgroundColor: string;
   width: string;
 }

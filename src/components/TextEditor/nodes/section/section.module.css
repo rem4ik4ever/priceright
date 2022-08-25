@@ -1,14 +1,11 @@
 .root {
-  @apply flex container justify-center max-w-full mx-auto;
-
-
+  @apply flex justify-center;
 }
 
 .content { 
   @apply p-2 relative;
 
   &:hover:not(.focused) {
-    /*box-shadow: rgb(33 33 33 / 80%) 0px 0px 1px 2px, rgb(33 33 33 / 50%) 0px 0px 0px 5000px;*/
     @apply outline-dotted outline-blue-200 outline-1;
     & > .bottomControls .topControls {
       @apply z-0;
@@ -21,7 +18,7 @@
 }
 
 .bottomControls{
-  @apply absolute flex justify-center -mb-4 opacity-0 left-0 w-full transition-opacity;
+  @apply absolute flex justify-center -mb-4 opacity-0 left-0 bottom-0 w-full transition-opacity;
 
   &:hover {
     @apply opacity-100;
@@ -29,7 +26,7 @@
 }
 
 .topControls{
-  @apply absolute flex justify-center -mt-6 pb-4 opacity-0 left-0 w-full transition-opacity;
+  @apply absolute flex justify-center -mt-6 pb-4 opacity-0 top-0 left-0 w-full transition-opacity;
 
   &:hover {
     @apply opacity-100;
@@ -72,14 +69,18 @@
 }
 
 .controls {
-  @apply flex overflow-hidden rounded-md
+  @apply flex overflow-hidden rounded-md border;
 }
 
 .settingsBtn {
-  @apply text-sm px-1 bg-accent-2 text-primary transition-all flex items-center justify-center w-6 h-6;
+  @apply text-sm px-1 text-primary transition-all flex items-center justify-center w-6 h-6 border-r bg-primary;
+
+  &:last-child {
+    @apply border-none;
+  }
 
   &:hover {
-    @apply bg-accent-3;
+    @apply bg-accent-2;
   }
 }
 

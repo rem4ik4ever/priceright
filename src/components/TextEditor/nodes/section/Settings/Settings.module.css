@@ -1,0 +1,15 @@
+.colorInput {
+  @apply w-5 h-6;
+}
+
+.settingsLabel {
+  @apply text-xs font-semibold;
+}
+
+.inputLabel {
+  @apply text-xs;
+}
+
+.numberInput {
+  @apply h-6 w-12 text-xs border rounded-md text-center px-1;
+}

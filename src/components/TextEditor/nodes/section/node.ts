@@ -1,14 +1,10 @@
-import { mergeAttributes, Node, CommandProps } from '@tiptap/core'
+import { Node } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { Section } from './section'
-import { v4 } from 'uuid'
 import { NodeStyles } from '@components/PageBuilder/context'
 
-export interface SectionOptions {
-  id: string,
-  itemTypeName: string,
-  HTMLAttributes: Record<string, any>,
-  styles?: NodeStyles
+export interface SectionOptions extends NodeStyles {
+  color: string;
 }
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -33,15 +29,11 @@ export const SectionNode = Node.create<SectionOptions, { isFocused: boolean }>({
 
   addOptions() {
     return {
-      id: 'id',
-      itemTypeName: 'column',
-      HTMLAttributes: {},
-      styles: {
-        padding: '',
-        margin: '',
-        backgroundColor: 'none',
-        width: '100%'
-      }
+      padding: [0, 0, 0, 0],
+      margin: [0, 0, 0, 0],
+      color: 'inherit',
+      backgroundColor: 'none',
+      width: '100%',
     }
   },
 
@@ -62,19 +54,44 @@ export const SectionNode = Node.create<SectionOptions, { isFocused: boolean }>({
   addAttributes() {
     return {
       width: {
-        default: this.options.styles?.width
+        default: this.options?.width
       },
       backgroundColor: {
-        default: this.options.styles?.backgroundColor
+        default: this.options?.backgroundColor
+      },
+      paddingTop: {
+        default: this.options?.padding?.[0] || 0
+      },
+      paddingRight: {
+        default: this.options?.padding?.[1] || 0
+      },
+      paddingBottom: {
+        default: this.options?.padding?.[2] || 0
+      },
+      paddingLeft: {
+        default: this.options?.padding?.[3] || 0
+      },
+
+      marginTop: {
+        default: this.options?.margin?.[0] || 0
+      },
+      marginRight: {
+        default: this.options?.margin?.[1] || 0
+      },
+      marginBottom: {
+        default: this.options?.margin?.[2] || 0
+      },
+      marginLeft: {
+        default: this.options?.margin?.[3] || 0
+      },
+      color: {
+        default: this.options.color
       }
-      //styles: {
-      //  default: this.options.styles
-      //},
     }
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['page-section', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0]
+    return ['page-section', HTMLAttributes, 0]
   },
 
   addNodeView() {
